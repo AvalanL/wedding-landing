@@ -1,5 +1,8 @@
 'use client'
 
+// Force dynamic rendering - this page needs runtime Supabase env vars
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState } from 'react'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/navigation'

@@ -1,5 +1,8 @@
 "use client"
 
+// Force dynamic rendering - this page loads data at runtime
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useMemo, useState } from "react"
 import { normalizeSlug, renderSnapshot, type EditorSnapshot } from "@/app/page"
 

@@ -1,5 +1,8 @@
 "use client"
 
+// Force dynamic rendering - this page needs runtime Supabase env vars
+export const dynamic = 'force-dynamic'
+
 import type React from "react"
 
 import { useEffect, useState } from "react"
