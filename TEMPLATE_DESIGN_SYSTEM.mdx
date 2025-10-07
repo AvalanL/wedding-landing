@@ -1,0 +1,2103 @@
+# 🎨 Wedding Template Design System
+
+**Complete Documentation for Understanding, Creating, and Maintaining Wedding Templates**
+
+---
+
+## 📋 Table of Contents
+
+1. [System Architecture](#system-architecture)
+2. [Design Principles](#design-principles)
+3. [Color Palette System](#color-palette-system)
+4. [Typography System](#typography-system)
+5. [Spacing System](#spacing-system)
+6. [Component Patterns](#component-patterns)
+7. [Template Breakdown (All 12)](#template-breakdown)
+8. [Creating New Templates](#creating-new-templates)
+9. [Best Practices](#best-practices)
+
+---
+
+## System Architecture
+
+### Overview
+The wedding template system is built on **Next.js 14** with **Tailwind CSS** and **shadcn/ui** components. Each template is a self-contained React component that receives standardized props and renders a complete wedding website.
+
+### File Structure
+```
+app/
+  page.tsx              # Main file containing all templates and editor
+  layout.tsx            # Global layout with fonts
+  globals.css           # Tailwind configuration
+components/ui/          # shadcn components (Button, Input, etc.)
+public/                 # Static images
+```
+
+### Core Data Model
+
+```typescript
+interface WeddingData {
+  bride: string
+  groom: string
+  date: string
+  time: string
+  venue: string
+  address: string
+  dresscode: string
+  story: string
+  timeline: { time: string; event: string }[]
+  gallery: { url: string; alt: string }[]
+  faq: { question: string; answer: string }[]
+  registry: { text: string; link: string }
+  accommodation: { text: string }
+  rsvp: { text: string; email: string }
+}
+```
+
+### Color Palette Interface
+
+```typescript
+interface ColorPalette {
+  name: string          // Display name (e.g., "Gyllene Solnedgång")
+  primary: string       // Main brand color (e.g., "amber-600")
+  secondary: string     // Supporting color (e.g., "orange-500")
+  accent: string        // Highlight color (e.g., "yellow-400")
+  background: string    // Page background (e.g., "amber-50")
+  text: string          // Main text color (e.g., "amber-900")
+}
+```
+
+### Section Visibility System
+
+```typescript
+interface SectionVisibility {
+  hero: boolean
+  story: boolean
+  details: boolean
+  timeline: boolean
+  gallery: boolean
+  faq: boolean
+  registry: boolean
+  accommodation: boolean
+  rsvp: boolean
+}
+```
+
+### Template Component Signature
+
+Every template follows this exact signature:
+
+```typescript
+function TemplateNameTemplate({
+  data,
+  palette,
+  sections,
+  uploadedImages,
+}: {
+  data: WeddingData
+  palette: ColorPalette
+  sections: SectionVisibility
+  uploadedImages: { [key: string]: string }
+}) {
+  return (
+    <div className={`font-sans text-${palette.text} bg-${palette.background} min-h-screen`}>
+      {/* Template sections here */}
+    </div>
+  )
+}
+```
+
+---
+
+## Design Principles
+
+### 1. Emotional Resonance
+Each template evokes specific feelings appropriate to its theme:
+- **Romantic**: Love, warmth, softness
+- **Modern**: Sophistication, clean lines, contemporary
+- **Vintage**: Nostalgia, timelessness, heritage
+- **Elegant**: Luxury, refinement, minimalism
+- **Bohemian**: Nature, freedom, earthiness
+- **Minimalist**: Simplicity, space, clarity
+- **Garden**: Growth, freshness, botanical beauty
+- **Art Deco**: Glamour, geometry, 1920s opulence
+- **Beach**: Ocean, relaxation, destination
+- **Rustic**: Countryside, warmth, authenticity
+- **Whimsical**: Fun, playfulness, personality
+- **Cinematic**: Drama, photography, editorial
+
+### 2. Visual Hierarchy
+- **Hero section**: Largest text (text-4xl md:text-5xl), full-screen height
+- **Section headings**: Large text (text-4xl), centered or left-aligned
+- **Body text**: Readable sizes (text-lg to text-xl), generous line-height
+- **Details**: Smaller text (text-sm to text-base), uppercase tracking
+
+### 3. Consistency Within Templates
+- Repeating design patterns create trust
+- Consistent spacing system (multiples of 4px)
+- Unified color palette throughout
+- Cohesive typography choices
+
+### 4. Accessibility First
+- WCAG AAA contrast ratios where possible
+- Minimum 44x44px tap targets
+- Semantic HTML structure
+- Focus states on interactive elements
+
+### 5. Performance Minded
+- CSS transforms for animations (GPU accelerated)
+- Opacity transitions (GPU accelerated)
+- No layout thrashing
+- Minimal JavaScript
+
+---
+
+## Color Palette System
+
+### Philosophy
+Each template has **3 carefully curated color palettes** that work harmoniously with its design language. Palettes use **Tailwind CSS color classes** for consistency and reliability.
+
+### Color Role Definitions
+
+#### 1. Primary Color
+**Purpose**: Main brand color, used for:
+- Key interactive elements (buttons, links)
+- Icons and decorative elements
+- Important text highlights
+- Timeline markers, borders
+
+**Usage Pattern**:
+```jsx
+<Button className={`bg-${palette.primary} hover:bg-${palette.primary}/90`}>
+<Calendar className={`text-${palette.primary}`} />
+<div className={`border-${palette.primary}`}></div>
+```
+
+#### 2. Secondary Color
+**Purpose**: Supporting color, used for:
+- Secondary buttons
+- Gradient combinations with primary
+- Alternative highlights
+- Decorative elements
+
+**Usage Pattern**:
+```jsx
+<div className={`bg-gradient-to-br from-${palette.primary} to-${palette.secondary}`}>
+<span className={`text-${palette.secondary}`}>Supporting text</span>
+```
+
+#### 3. Accent Color
+**Purpose**: Highlight color, used for:
+- Hover states
+- Call-to-action elements
+- Decorative icons
+- Tertiary elements
+
+**Usage Pattern**:
+```jsx
+<Heart className={`text-${palette.accent} animate-pulse`} />
+<div className={`border-${palette.accent}/40`}></div>
+```
+
+#### 4. Background Color
+**Purpose**: Page and section backgrounds, used for:
+- Main page background
+- Card backgrounds
+- Section alternating backgrounds
+- Subtle color washes
+
+**Usage Pattern**:
+```jsx
+<div className={`bg-${palette.background}`}>
+<section className={`bg-gradient-to-b from-white to-${palette.background}`}>
+```
+
+#### 5. Text Color
+**Purpose**: Main text color, used for:
+- All body text
+- Headings
+- Paragraphs
+- Must have proper contrast with background
+
+**Usage Pattern**:
+```jsx
+<h1 className={`text-${palette.text}`}>Heading</h1>
+<p className={`text-${palette.text}/90`}>Body with 90% opacity</p>
+```
+
+### Palette Examples by Template
+
+#### Romantic Template Palettes
+```javascript
+{
+  name: "Gyllene Solnedgång",      // Golden Sunset
+  primary: "amber-600",            // Warm gold
+  secondary: "orange-500",         // Sunset orange
+  accent: "yellow-400",            // Light highlight
+  background: "amber-50",          // Soft cream
+  text: "amber-900",               // Deep brown
+}
+
+{
+  name: "Rosenträdgård",          // Rose Garden
+  primary: "rose-600",            // Deep rose
+  secondary: "pink-500",          // Soft pink
+  accent: "red-400",              // Bright accent
+  background: "rose-50",          // Pale pink
+  text: "rose-900",               // Dark rose
+}
+
+{
+  name: "Lavendel Drömmar",       // Lavender Dreams
+  primary: "purple-600",          // Rich purple
+  secondary: "violet-500",        // Violet tone
+  accent: "pink-400",             // Pink highlight
+  background: "purple-50",        // Pale lavender
+  text: "purple-900",             // Deep purple
+}
+```
+
+#### Cinematic Template Palettes (Dark Backgrounds)
+```javascript
+{
+  name: "Film Noir",
+  primary: "gray-400",            // Light gray (shows on dark)
+  secondary: "gray-500",          // Medium gray
+  accent: "gray-300",             // Lighter accent
+  background: "gray-900",         // Very dark background
+  text: "gray-50",                // Near-white text (high contrast)
+}
+
+{
+  name: "Golden Hour",
+  primary: "amber-500",           // Warm light
+  secondary: "orange-400",        // Sunset tone
+  accent: "yellow-300",           // Bright highlight
+  background: "neutral-900",      // Dark background
+  text: "amber-50",               // Warm white text
+}
+```
+
+### Color Palette Rules
+
+#### Rule 1: Light Backgrounds Need Dark Text
+```javascript
+// ✅ CORRECT
+background: "rose-50",    // Light background
+text: "rose-900",         // Dark text (high contrast)
+
+// ❌ INCORRECT
+background: "rose-50",    // Light background
+text: "rose-100",         // Light text (no contrast)
+```
+
+#### Rule 2: Dark Backgrounds Need Light Text
+```javascript
+// ✅ CORRECT
+background: "gray-900",   // Dark background
+text: "gray-50",          // Light text (high contrast)
+
+// ❌ INCORRECT
+background: "gray-900",   // Dark background
+text: "gray-900",         // Dark text (no contrast)
+```
+
+#### Rule 3: Use Valid Tailwind Colors Only
+```javascript
+// ✅ CORRECT
+"amber-600", "rose-500", "teal-400", "slate-900"
+
+// ❌ INCORRECT
+"mint-400",    // Tailwind has no "mint" color
+"stone-600",   // Use "stone" carefully, prefer standard colors
+```
+
+#### Rule 4: Primary Should Be 500-700 Range
+```javascript
+// ✅ CORRECT - Visible and vibrant
+primary: "rose-600"
+
+// ⚠️ CAUTION - Too light or too dark
+primary: "rose-200"  // May not have enough contrast
+primary: "rose-950"  // May be too dark
+```
+
+#### Rule 5: Gradients Use Primary + Secondary
+```javascript
+// ✅ CORRECT PATTERN
+<div className={`bg-gradient-to-br from-${palette.primary} to-${palette.secondary}`}>
+
+// Common gradient patterns:
+from-${palette.background} via-white to-${palette.background}
+from-${palette.primary}/20 via-${palette.secondary}/30 to-${palette.accent}/40
+```
+
+---
+
+## Typography System
+
+### Font Families
+
+#### Primary Fonts (Global)
+```css
+/* app/layout.tsx */
+Playfair_Display (serif)    // Romantic, elegant headings
+Source_Sans_3 (sans-serif)  // Clean, readable body text
+```
+
+#### Template-Specific Fonts
+
+```javascript
+// Romantic, Vintage, Beach, Rustic
+fontFamily: 'Georgia, serif'
+
+// Modern, Elegant, Cinematic
+fontFamily: 'Helvetica Neue, Arial, sans-serif'
+
+// Whimsical
+fontFamily: 'Comic Sans MS, cursive, sans-serif'
+
+// Art Deco (may use Broadway if available)
+fontFamily: 'Georgia, serif' // Fallback
+```
+
+### Typography Scale (After Compaction)
+
+```javascript
+// Hero Headings (Names)
+text-4xl md:text-5xl         // 36px / 48px (mobile / desktop)
+
+// Section Headings
+text-4xl                     // 36px
+
+// Subheadings
+text-2xl md:text-3xl         // 24px / 30px
+
+// Body Text (Large)
+text-xl md:text-2xl          // 20px / 24px
+
+// Body Text (Standard)
+text-lg                      // 18px
+
+// Small Text / Labels
+text-sm                      // 14px
+
+// Tiny Text / Captions
+text-xs                      // 12px
+```
+
+### Font Weight Scale
+
+```javascript
+font-thin       // 100 - Cinematic/Elegant
+font-light      // 300 - Beach/Modern
+font-normal     // 400 - Default body
+font-medium     // 500 - Emphasis
+font-semibold   // 600 - Strong emphasis
+font-bold       // 700 - Whimsical/Strong headings
+```
+
+### Letter Spacing (Tracking)
+
+```javascript
+// Tight (Default)
+tracking-tight              // -0.025em
+
+// Normal (Default)
+tracking-normal             // 0em
+
+// Wide (Elegant/Luxury)
+tracking-wide               // 0.025em
+
+// Wider (Headings)
+tracking-wider              // 0.05em
+
+// Widest (Uppercase labels)
+tracking-widest             // 0.1em
+
+// Custom (Cinematic/Elegant)
+tracking-[0.15em]           // 0.15em
+tracking-[0.2em]            // 0.2em
+tracking-[0.3em]            // 0.3em
+tracking-[0.4em]            // 0.4em
+```
+
+### Line Height
+
+```javascript
+// Tight headings
+leading-tight               // 1.25
+
+// Normal
+leading-normal              // 1.5
+
+// Relaxed body text
+leading-relaxed             // 1.625
+
+// Loose (high readability)
+style={{ lineHeight: 1.9 }} // Custom 1.9
+style={{ lineHeight: 2.0 }} // Custom 2.0
+```
+
+### Text Styling Patterns
+
+#### Hero Names (Main Headings)
+```jsx
+<h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+  {data.bride}
+</h1>
+```
+
+#### Section Headings
+```jsx
+<h2 className={`text-4xl font-light text-${palette.text} mb-4`}>
+  Vår Historia
+</h2>
+```
+
+#### Body Text
+```jsx
+<p className={`text-xl leading-relaxed text-${palette.text}/90`}>
+  {data.story}
+</p>
+```
+
+#### Uppercase Labels
+```jsx
+<p className="text-sm uppercase tracking-widest opacity-60">
+  Datum
+</p>
+```
+
+---
+
+## Spacing System
+
+### Base Unit: 4px
+All spacing follows Tailwind's 4px base unit system for consistency.
+
+### Spacing Scale (Post-Compaction)
+
+```javascript
+// Section Vertical Padding
+py-16                       // 64px (was py-32 / 128px)
+
+// Large Vertical Spacing
+py-10                       // 40px
+
+// Medium Vertical Spacing
+py-8                        // 32px
+
+// Standard Vertical Spacing
+py-6                        // 24px
+
+// Small Vertical Spacing
+py-4                        // 16px
+
+// Horizontal Padding
+px-8                        // 32px (standard section padding)
+px-6                        // 24px
+px-4                        // 16px
+```
+
+### Margin Scale
+
+```javascript
+// Large margins (section breaks)
+mb-10                       // 40px (was mb-20 / 80px)
+
+// Medium margins
+mb-8                        // 32px (was mb-16 / 64px)
+
+// Standard margins
+mb-6                        // 24px (was mb-12 / 48px)
+
+// Small margins
+mb-4                        // 16px
+
+// Tiny margins
+mb-2                        // 8px
+```
+
+### Card Padding
+
+```javascript
+// Large cards
+p-10                        // 40px (was p-16 / 64px)
+
+// Standard cards
+p-8                         // 32px (was p-12 / 48px)
+
+// Medium cards
+p-6                         // 24px
+
+// Small cards
+p-4                         // 16px
+```
+
+### Grid Gaps
+
+```javascript
+// Large grids
+gap-10                      // 40px (was gap-20 / 80px)
+
+// Standard grids
+gap-8                       // 32px
+
+// Medium grids
+gap-6                       // 24px
+
+// Compact grids
+gap-4                       // 16px
+```
+
+### Spacing Patterns by Section
+
+#### Hero Section
+```jsx
+<section className="relative h-screen flex items-center justify-center text-center px-8">
+  {/* Full viewport height */}
+  {/* Horizontal padding for mobile safety */}
+</section>
+```
+
+#### Content Section
+```jsx
+<section className="py-16 px-8 bg-white">
+  <div className="max-w-6xl mx-auto">
+    {/* py-16: Section breathing room */}
+    {/* px-8: Mobile-safe horizontal padding */}
+    {/* max-w-6xl: Content container */}
+  </div>
+</section>
+```
+
+#### Card Grid
+```jsx
+<div className="grid md:grid-cols-3 gap-10">
+  {/* gap-10: Space between cards */}
+  {/* md:grid-cols-3: Responsive grid */}
+</div>
+```
+
+---
+
+## Component Patterns
+
+### Hero Section Pattern
+
+```jsx
+{sections.hero && (
+  <section className="relative h-screen flex items-center justify-center text-center px-8 overflow-hidden">
+    {/* Background Image */}
+    <div
+      className="absolute inset-0 bg-cover bg-center"
+      style={{
+        backgroundImage: `url(${uploadedImages["hero"] || data.gallery[0]?.url || "/default.jpg"})`,
+      }}
+    >
+      {/* Gradient Overlay for readability */}
+      <div className={`absolute inset-0 bg-gradient-to-b from-${palette.primary}/20 via-${palette.secondary}/30 to-${palette.text}/60`}></div>
+    </div>
+
+    {/* Content */}
+    <div className="relative z-10 max-w-5xl text-white">
+      {/* Decorative Element */}
+      <div className="mb-8">
+        <Heart className="w-16 h-16 mx-auto animate-pulse text-rose-300" />
+      </div>
+
+      {/* Names */}
+      <h1 className="text-4xl md:text-5xl font-bold mb-6">
+        {data.bride}
+      </h1>
+
+      <div className="text-5xl my-8">&</div>
+
+      <h1 className="text-4xl md:text-5xl font-bold mb-6">
+        {data.groom}
+      </h1>
+
+      {/* Date Badge */}
+      <div className={`inline-block px-8 py-4 bg-white/20 backdrop-blur-md rounded-full mb-4`}>
+        <p className="text-2xl">{data.date}</p>
+      </div>
+
+      {/* Venue */}
+      {data.venue && (
+        <p className="text-xl mb-6 italic">{data.venue}</p>
+      )}
+
+      {/* CTA Button */}
+      <Button className={`bg-${palette.primary} hover:scale-105 transition-all`}>
+        OSA Nu
+      </Button>
+    </div>
+  </section>
+)}
+```
+
+### Story Section Pattern
+
+```jsx
+{sections.story && (
+  <section className={`py-16 px-8 bg-gradient-to-b from-white to-${palette.background}`}>
+    <div className="max-w-4xl mx-auto">
+      {/* Section Header */}
+      <div className="text-center mb-8">
+        <Heart className={`w-12 h-12 mx-auto mb-6 text-${palette.primary}`} />
+        <h2 className={`text-4xl font-light text-${palette.text} mb-4`}>
+          Vår Historia
+        </h2>
+        <p className={`text-sm uppercase tracking-widest text-${palette.text}/60`}>
+          Där allt började...
+        </p>
+      </div>
+
+      {/* Story Card */}
+      <div className={`bg-white/80 backdrop-blur-sm p-10 rounded-3xl shadow-xl border border-${palette.primary}/20`}>
+        <p className={`text-xl leading-relaxed text-${palette.text}/90`}>
+          {data.story}
+        </p>
+      </div>
+    </div>
+  </section>
+)}
+```
+
+### Details Section Pattern (3-Column Grid)
+
+```jsx
+{sections.details && (
+  <section className="py-16 px-8 bg-white">
+    <div className="max-w-6xl mx-auto">
+      <h2 className={`text-4xl text-center mb-10 text-${palette.text}`}>
+        Information
+      </h2>
+
+      <div className="grid md:grid-cols-3 gap-10">
+        {/* Date Card */}
+        <div className={`group text-center bg-${palette.background} p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}>
+          <div className={`w-20 h-20 mx-auto mb-6 rounded-full bg-${palette.primary}/10 flex items-center justify-center`}>
+            <Calendar className={`w-10 h-10 text-${palette.primary} group-hover:scale-110 transition-transform`} />
+          </div>
+          <h3 className={`text-2xl font-semibold mb-4 text-${palette.text}`}>Datum</h3>
+          <p className={`text-xl text-${palette.primary} mb-2`}>{data.date}</p>
+          <p className={`text-${palette.text}/70`}>{data.time}</p>
+        </div>
+
+        {/* Location Card */}
+        <div className={`group text-center bg-${palette.background} p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}>
+          <div className={`w-20 h-20 mx-auto mb-6 rounded-full bg-${palette.primary}/10 flex items-center justify-center`}>
+            <MapPin className={`w-10 h-10 text-${palette.primary} group-hover:scale-110 transition-transform`} />
+          </div>
+          <h3 className={`text-2xl font-semibold mb-4 text-${palette.text}`}>Plats</h3>
+          <p className={`text-xl text-${palette.primary} mb-2`}>{data.venue}</p>
+          <p className={`text-${palette.text}/70`}>{data.address}</p>
+        </div>
+
+        {/* Dresscode Card */}
+        <div className={`group text-center bg-${palette.background} p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}>
+          <div className={`w-20 h-20 mx-auto mb-6 rounded-full bg-${palette.primary}/10 flex items-center justify-center`}>
+            <Shirt className={`w-10 h-10 text-${palette.primary} group-hover:scale-110 transition-transform`} />
+          </div>
+          <h3 className={`text-2xl font-semibold mb-4 text-${palette.text}`}>Klädkod</h3>
+          <p className={`text-xl text-${palette.primary}`}>{data.dresscode}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+```
+
+### Timeline Section Pattern (Vertical)
+
+```jsx
+{sections.timeline && (
+  <section className={`py-16 px-8 bg-${palette.background}`}>
+    <div className="max-w-4xl mx-auto">
+      <div className="text-center mb-10">
+        <Clock className={`w-12 h-12 mx-auto mb-6 text-${palette.primary}`} />
+        <h2 className={`text-4xl text-${palette.text}`}>Tidslinje</h2>
+      </div>
+
+      <div className="relative">
+        {/* Connecting Line */}
+        <div className={`absolute left-12 top-0 bottom-0 w-0.5 bg-gradient-to-b from-${palette.primary}/20 via-${palette.primary} to-${palette.primary}/20`}></div>
+
+        <div className="space-y-8">
+          {data.timeline.map((item, index) => (
+            <div key={index} className="relative flex items-start gap-8 group">
+              {/* Time */}
+              <div className={`text-3xl font-bold text-${palette.primary} w-24 text-right`}>
+                {item.time}
+              </div>
+
+              {/* Marker */}
+              <div className="relative">
+                <div className={`w-6 h-6 rounded-full bg-${palette.primary} border-4 border-white shadow-lg group-hover:scale-125 transition-transform`}></div>
+                <div className={`absolute inset-0 rounded-full bg-${palette.primary} animate-ping opacity-30`}></div>
+              </div>
+
+              {/* Event Card */}
+              <div className={`flex-1 bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all`}>
+                <p className={`text-xl text-${palette.text}`}>{item.event}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+```
+
+### Gallery Section Pattern
+
+```jsx
+{sections.gallery && (
+  <section className="py-16 px-8 bg-white">
+    <div className="max-w-6xl mx-auto">
+      <div className="text-center mb-10">
+        <Camera className={`w-12 h-12 mx-auto mb-6 text-${palette.primary}`} />
+        <h2 className={`text-4xl text-${palette.text}`}>Galleri</h2>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-8">
+        {data.gallery.map((photo, index) => (
+          <div
+            key={index}
+            className="group relative aspect-square overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500"
+          >
+            <img
+              src={uploadedImages[`gallery-${index}`] || photo.url}
+              alt={photo.alt}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+
+            {/* Overlay on Hover */}
+            <div className={`absolute inset-0 bg-gradient-to-t from-${palette.primary}/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center`}>
+              <Heart className="w-16 h-16 text-white" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+```
+
+---
+
+## Template Breakdown
+
+### 1. 🌹 Romantic Template
+
+**Design Philosophy**: Soft, warm, emotional, classic love story aesthetic.
+
+**Visual Elements**:
+- Animated pulsing heart icon
+- Decorative quotation marks around story
+- Rose/heart motifs throughout
+- Soft rounded corners (rounded-3xl)
+- Backdrop blur effects (frosted glass cards)
+
+**Typography**:
+- Font: Playfair Display (serif) for headings
+- Style: Elegant, flowing, romantic
+- Ampersand: Special styling with decorative lines
+
+**Color Palettes**:
+1. **Gyllene Solnedgång** (Golden Sunset) - Amber/orange warm tones
+2. **Rosenträdgård** (Rose Garden) - Rose/pink soft tones
+3. **Lavendel Drömmar** (Lavender Dreams) - Purple/violet dreamy tones
+
+**Spacing**:
+- Generous padding: p-10 on cards
+- Section spacing: py-16
+- Breathing room emphasized
+
+**Key Components**:
+```jsx
+// Animated Heart
+<Heart className="w-16 h-16 mx-auto mb-8 text-rose-300 animate-pulse" />
+
+// Decorative Quotation Marks
+<div className="text-8xl text-rose-600/20 font-serif">"</div>
+
+// Frosted Glass Card
+<div className="bg-white/80 backdrop-blur-sm p-10 rounded-3xl shadow-xl">
+```
+
+**Unique Features**:
+- Scroll indicator at bottom of hero
+- Ping animation on timeline markers
+- Heart SVG dividers between sections
+
+---
+
+### 2. 💎 Modern Template
+
+**Design Philosophy**: Clean, sophisticated, contemporary with geometric elements.
+
+**Visual Elements**:
+- Geometric pattern overlays (rotating squares)
+- Extralight typography (font-thin)
+- Sharp lines and minimal decoration
+- Two-column layouts
+- Border-left accent bars
+
+**Typography**:
+- Font: Helvetica Neue, sans-serif
+- Weight: Extralight (100) to Light (300)
+- Tracking: Tight to normal
+
+**Color Palettes**:
+1. **Havets Blå** (Sea Blue) - Cyan/blue oceanic
+2. **Midnatt** (Midnight) - Slate/gray dark tones
+3. **Elektrisk** (Electric) - Indigo/purple vibrant
+
+**Spacing**:
+- Minimal padding: p-8
+- Clean gaps: gap-10
+- Asymmetric layouts
+
+**Key Components**:
+```jsx
+// Geometric Pattern Overlay
+<div className="absolute top-10 right-10 w-64 h-64 border border-white rotate-45"></div>
+
+// Two-Column Story Layout
+<div className="grid md:grid-cols-2 gap-10 items-center">
+
+// Border-Left Accent
+<div className={`border-l-4 border-${palette.primary} p-8`}>
+```
+
+**Unique Features**:
+- Dark background details section
+- Frosted glass cards (white/10 backdrop-blur)
+- Thick accent bars (4px)
+
+---
+
+### 3. 📜 Vintage Template
+
+**Design Philosophy**: Nostalgic, timeless, antique with ornate details.
+
+**Visual Elements**:
+- Paper texture overlays
+- Ornate double borders (border-double)
+- Corner flourishes (L-shaped decorations)
+- Decorative diamonds (❖ symbols)
+- Sepia-toned color palette
+
+**Typography**:
+- Font: Georgia, serif
+- Style: Traditional, letterpress-inspired
+- "Est." date format for authenticity
+
+**Color Palettes**:
+1. **Antikt Guld** (Antique Gold) - Yellow/amber aged tones
+2. **Sepia Brun** (Sepia Brown) - Amber/brown warm vintage
+3. **Dammig Rosa** (Dusty Rose) - Rose/pink muted vintage
+
+**Spacing**:
+- Classic padding: p-8
+- Double border spacing
+- Ornamental gaps
+
+**Key Components**:
+```jsx
+// Paper Texture Overlay
+<div style={{
+  backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(120, 80, 40, 0.03) 2px, rgba(120, 80, 40, 0.03) 4px)`,
+  backgroundSize: '100% 4px'
+}}></div>
+
+// Ornate Double Border
+<div className="border-[12px] border-double border-amber-700/40">
+
+// Corner Flourishes
+<div className="absolute -top-3 -left-3 w-20 h-20">
+  <div className="w-full h-full border-l-4 border-t-4 border-amber-700"></div>
+</div>
+```
+
+**Unique Features**:
+- Frosted content cards with backdrop-blur
+- "Est." + date format
+- ❖ decorative symbols
+
+---
+
+### 4. 👑 Elegant Template
+
+**Design Philosophy**: Luxury, refinement, sophisticated minimalism.
+
+**Visual Elements**:
+- SVG dot pattern backgrounds
+- Ultra-thin typography (font-thin)
+- Extreme letter-spacing (0.2em-0.4em)
+- Geometric diamond accents (rotated squares)
+- Monochromatic gray palette
+
+**Typography**:
+- Font: Helvetica Neue
+- Weight: Thin (100)
+- Tracking: Wide to extreme (0.2em-0.4em)
+- Transform: UPPERCASE
+
+**Color Palettes**:
+1. **Klassisk Svart** (Classic Black) - Gray monochrome
+2. **Platina** (Platinum) - Slate sophisticated
+3. **Kol** (Charcoal) - Zinc dark elegance
+
+**Spacing**:
+- Generous white space
+- Minimal decoration
+- Asymmetric layouts
+
+**Key Components**:
+```jsx
+// SVG Dot Pattern
+<svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="elegantPattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+      <circle cx="50" cy="50" r="1" fill="currentColor" />
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#elegantPattern)" />
+</svg>
+
+// Extreme Tracking with Hover Animation
+<h1 className="tracking-[0.2em] uppercase hover:tracking-[0.4em] transition-all">
+
+// Diamond Accent
+<div className="w-3 h-3 bg-gray-300 rotate-45"></div>
+```
+
+**Unique Features**:
+- Tracking hover animations (letter-spacing expands)
+- × multiplication symbol instead of &
+- Gradient lines (from-transparent)
+
+---
+
+### 5. 🌿 Bohemian Template
+
+**Design Philosophy**: Natural, free-spirited, earthy with organic elements.
+
+**Visual Elements**:
+- Emoji decorations (🌿🌸🍂)
+- Organic flowing shapes
+- Natural color palette
+- Soft rounded corners
+- Botanical motifs
+
+**Typography**:
+- Font: Source Sans 3
+- Style: Casual, approachable
+- Handwritten-style accents
+
+**Color Palettes**:
+1. **Skogens Grön** (Forest Green) - Green/emerald natural
+2. **Jordtoner** (Earth Tones) - Amber/orange warm earth
+3. **Salvia & Mint** (Sage & Mint) - Emerald/teal fresh
+
+**Spacing**:
+- Organic spacing
+- Asymmetric layouts
+- Natural flow
+
+**Key Components**:
+```jsx
+// Emoji Decorations
+<div className="text-4xl">🌿</div>
+
+// Organic Shapes
+<div className="rounded-full bg-green-200/30">
+
+// Flowing Layout
+<div className="space-y-8">
+```
+
+**Unique Features**:
+- Heavy emoji usage
+- Natural material textures suggested
+- Earthy color combinations
+
+---
+
+### 6. ⬜ Minimalist Template
+
+**Design Philosophy**: Simplicity, clarity, breathing space, Scandinavian influence.
+
+**Visual Elements**:
+- Maximum white space
+- Hairline borders (0.5px)
+- Perfect grid alignment
+- Single accent color only
+- Swiss design influence
+
+**Typography**:
+- Font: Helvetica Neue
+- Weight: Light (300) to Regular (400)
+- Tracking: Normal
+- Line height: 2.0+ for breathing room
+
+**Color Palettes**:
+1. **Ren Vit** (Pure White) - Gray on white minimal
+2. **Skandinavisk Grå** (Scandinavian Gray) - Slate muted
+3. **Monokrom** (Monochrome) - Neutral pure minimal
+
+**Spacing**:
+- Maximum py-16
+- Large gaps: gap-10
+- Generous margins: mb-10
+
+**Key Components**:
+```jsx
+// Minimal Dot Indicator
+<div className={`w-2 h-2 rounded-full bg-${palette.primary}`}></div>
+
+// Hairline Border
+<div className="border-t border-gray-200" style={{ borderWidth: '0.5px' }}>
+
+// Perfect Grid
+<div className="grid grid-cols-3 gap-1">
+```
+
+**Unique Features**:
+- Focus on negative space (ma - Japanese aesthetic)
+- Asymmetric layouts
+- Hover-reveal interactions
+
+---
+
+### 7. 🌸 Garden Template
+
+**Design Philosophy**: Botanical, fresh, blooming with floral elements.
+
+**Visual Elements**:
+- Floral emoji decorations (🌸🌺🌻🌷)
+- Botanical illustrations
+- Soft pastel backgrounds
+- Rounded organic shapes
+- Garden-inspired layout
+
+**Typography**:
+- Font: Source Sans 3
+- Style: Fresh, friendly
+- Floral accent elements
+
+**Color Palettes**:
+1. **Botanisk Grön** (Botanical Green) - Green/lime fresh
+2. **Lavendelfält** (Lavender Field) - Violet/purple floral
+3. **Peach Blossom** - Orange/pink soft bloom
+
+**Spacing**:
+- Natural spacing
+- Organic flow
+- Asymmetric gardens
+
+**Key Components**:
+```jsx
+// Floral Decorations
+<div className="text-4xl">🌸</div>
+
+// Garden Colors
+<div className="bg-green-50">
+
+// Soft Shapes
+<div className="rounded-3xl">
+```
+
+**Unique Features**:
+- Heavy floral emoji usage
+- Botanical color combinations
+- Natural asymmetry
+
+---
+
+### 8. ✨ Art Deco Template
+
+**Design Philosophy**: 1920s glamour, geometric luxury, Gatsby opulence.
+
+**Visual Elements**:
+- Geometric patterns (sunbursts, chevrons, fans)
+- Gold foil effects
+- Symmetrical layouts (very important!)
+- Sharp angular shapes
+- Black and gold contrast
+
+**Typography**:
+- Font: Georgia serif (or Broadway if available)
+- Style: Bold, geometric, uppercase
+- Art Deco letterforms
+
+**Color Palettes**:
+1. **Gatsby Guld** (Gatsby Gold) - Yellow/amber on dark
+2. **Smaragd & Guld** (Emerald & Gold) - Emerald/yellow luxe
+3. **Midnatt & Silver** (Midnight & Silver) - Slate/blue elegant
+
+**Spacing**:
+- Symmetrical spacing
+- Stepped designs
+- Geometric rhythm
+
+**Key Components**:
+```jsx
+// Sunburst Pattern
+<div className="radial-gradient">
+
+// Geometric Border
+<div className="border-4 border-yellow-600">
+
+// Stepped Design
+<div className="space-y-4">
+  <div className="w-full h-2 bg-gradient-to-r"></div>
+  <div className="w-3/4 h-2 bg-gradient-to-r"></div>
+  <div className="w-1/2 h-2 bg-gradient-to-r"></div>
+</div>
+```
+
+**Unique Features**:
+- Dark backgrounds (neutral-900, slate-900)
+- Gold/metallic text colors
+- Perfect symmetry required
+- 1920s authenticity
+
+---
+
+### 9. 🏖️ Beach Template
+
+**Design Philosophy**: Coastal, relaxed, destination wedding, ocean-inspired.
+
+**Visual Elements**:
+- Ocean color gradients
+- Animated sun icon (pulse effect)
+- Backdrop blur effects (tropical feel)
+- Heart SVG dividers
+- Rounded-3xl (soft beach aesthetic)
+
+**Typography**:
+- Font: Georgia, serif
+- Style: Elegant resort feel
+- Text shadows for photo readability
+
+**Color Palettes**:
+1. **Havets Turkos** (Ocean Turquoise) - Cyan/teal ocean
+2. **Korall & Sand** (Coral & Sand) - Orange/pink warm beach
+3. **Solnedgång vid Havet** (Sunset by Sea) - Purple/pink sunset
+
+**Spacing**:
+- Relaxed spacing: py-16
+- Coastal breathing room
+- Soft padding: p-8
+
+**Key Components**:
+```jsx
+// Animated Sun Icon
+<svg className="w-20 h-20 mx-auto animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+</svg>
+
+// Ocean Gradient Overlay
+<div className={`absolute inset-0 bg-gradient-to-b from-${palette.primary}/20 via-${palette.secondary}/30 to-${palette.accent}/40`}></div>
+
+// Backdrop Blur Date Badge
+<div className="backdrop-blur-md bg-white/20 inline-block px-8 py-6 rounded-full border border-white/40">
+```
+
+**Unique Features**:
+- White gradient fade at hero bottom (simulates water/beach)
+- Heart SVG dividers throughout
+- Text shadows on hero: `textShadow: '0 2px 20px rgba(0,0,0,0.3)'`
+- All palette-dynamic (no hardcoded ocean colors)
+
+---
+
+### 10. 🌾 Rustic Template
+
+**Design Philosophy**: Countryside, farmhouse, authentic barn aesthetic.
+
+**Visual Elements**:
+- Wood grain texture overlays
+- Burlap pattern backgrounds
+- Barn star (❋) decorations
+- Rope-style dividers
+- Sepia-toned gallery (sepia-[0.15] filter)
+
+**Typography**:
+- Font: Georgia, serif
+- Style: Authentic country feel
+- Warm text shadows
+
+**Color Palettes**:
+1. **Trä & Linne** (Wood & Linen) - Amber/brown warm wood
+2. **Skogsgrön** (Forest Green) - Green/emerald nature
+3. **Vintage Jeans** (Vintage Jeans) - Blue/slate denim
+
+**Spacing**:
+- Country comfortable: py-16
+- Wood plank padding: p-8
+- Natural spacing
+
+**Key Components**:
+```jsx
+// Wood Grain Texture
+<div style={{
+  backgroundImage: `repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(101, 67, 33, 0.1) 2px, rgba(101, 67, 33, 0.1) 4px)`,
+  backgroundSize: "4px 100%",
+}}></div>
+
+// Burlap Texture
+<div style={{
+  backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(101, 67, 33, 0.1) 2px, rgba(101, 67, 33, 0.1) 4px)`,
+  backgroundSize: "10px 10px",
+}}></div>
+
+// Barn Star Decoration
+<div className={`text-5xl text-${palette.primary}`}>❋</div>
+
+// Rope-Style Divider
+<div className="w-32 h-1 bg-amber-300/60 rounded-full"></div>
+
+// Wood Plank Date Badge
+<div className="inline-block px-8 py-6 bg-amber-800/70 backdrop-blur-sm border-2 border-amber-400/40 relative">
+  <div className="absolute inset-0 opacity-20">
+    <div style={{
+      backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0, 0, 0, 0.1) 3px, rgba(0, 0, 0, 0.1) 6px)`,
+    }} className="w-full h-full"></div>
+  </div>
+  <p className="relative z-10">{data.date}</p>
+</div>
+```
+
+**Unique Features**:
+- Sepia gallery images: `className="sepia-[0.15]"`
+- Wood texture overlays on every card
+- Barn star ❋ as decorative element
+- Rope-style connecting line in timeline (rounded-full on gradient)
+- Decorative corner overlays on gallery hover
+
+---
+
+### 11. 🎉 Whimsical Template
+
+**Design Philosophy**: Fun, playful, personality-driven, colorful celebration.
+
+**Visual Elements**:
+- Floating animated bubbles (bounce with delays)
+- Heavy emoji usage (💕✨🎈🎊🎁🎀)
+- Comic Sans MS typography
+- Rainbow gradients
+- Rotated cards (transform: rotate-1deg)
+- Dashed borders (border-dashed)
+
+**Typography**:
+- Font: Comic Sans MS, cursive
+- Style: Fun, bold, playful
+- Text shadows: `textShadow: '4px 4px 0px rgba(255, 105, 180, 0.6), 8px 8px 0px rgba(138, 43, 226, 0.4)'`
+
+**Color Palettes**:
+1. **Konfetti** (Confetti) - Pink/purple/yellow bright
+2. **Regnbåge** (Rainbow) - Blue/green/orange vibrant
+3. **Drömsk Pastell** (Dreamy Pastel) - Purple/pink soft pastels
+
+**Spacing**:
+- Playful spacing: py-16
+- Exaggerated hover: hover:-translate-y-4
+- Rotation effects: rotate-3, -rotate-3
+
+**Key Components**:
+```jsx
+// Floating Animated Bubbles
+<div className="absolute top-10 left-10 w-32 h-32 bg-pink-300/30 rounded-full animate-bounce"
+     style={{ animationDelay: "0s", animationDuration: "3s" }}>
+</div>
+
+// Comic Sans Typography with Shadow
+<h1
+  className="text-4xl md:text-5xl font-bold"
+  style={{
+    fontFamily: "Comic Sans MS, cursive, sans-serif",
+    textShadow: "4px 4px 0px rgba(255, 105, 180, 0.6), 8px 8px 0px rgba(138, 43, 226, 0.4)",
+  }}
+>
+
+// Rotated Card with Dashed Border
+<div
+  className={`border-4 border-dashed border-${palette.primary} rounded-3xl transform hover:rotate-1`}
+  style={{ transform: index % 2 === 0 ? "rotate(-1deg)" : "rotate(1deg)" }}
+>
+
+// Rainbow Gradient Button
+<Button className="bg-gradient-to-r from-pink-500 via-purple-500 to-yellow-500 hover:from-pink-600 hover:via-purple-600 hover:to-yellow-600 rounded-full border-4 border-white">
+
+// Spinning Stars
+<span className="text-3xl animate-spin" style={{ animationDuration: "3s" }}>✨</span>
+
+// Emoji Corner Decorations
+<div className="absolute -top-6 -left-6 text-6xl">🎈</div>
+<div className="absolute -top-6 -right-6 text-6xl">🎊</div>
+<div className="absolute -bottom-6 -left-6 text-6xl">🎁</div>
+<div className="absolute -bottom-6 -right-6 text-6xl">🎀</div>
+```
+
+**Unique Features**:
+- **Intentional hardcoded colors** (pink-300, purple-300, yellow-300, blue-300, green-300) for playful multi-color bubbles
+- Timeline uses different emoji per event: ["🎊", "💒", "📸", "🍽️", "💃"]
+- Gallery borders alternate colors: ["pink-300", "purple-300", "yellow-300"]
+- Cards have rotation variations: `rotate(-2deg)` or `rotate(2deg)`
+- Exaggerated hover effects: `hover:-translate-y-4 hover:rotate-3`
+- All text uses Comic Sans MS
+
+---
+
+### 12. 🎬 Cinematic Template
+
+**Design Philosophy**: Dramatic, editorial, photography-focused, film-inspired.
+
+**Visual Elements**:
+- Full-bleed hero images
+- Film grain texture overlay (SVG noise filter)
+- Magazine-style layouts
+- Minimal numbered gallery
+- Dark backgrounds (gray-900, neutral-900, slate-900)
+
+**Typography**:
+- Font: Helvetica Neue, sans-serif
+- Weight: Thin (100)
+- Tracking: Extreme (0.15em-0.3em)
+- Transform: UPPERCASE
+
+**Color Palettes**:
+1. **Film Noir** - Gray monochrome dark (text: gray-50)
+2. **Golden Hour** - Amber/orange warm dark (text: amber-50)
+3. **Blåtimmen** (Blue Hour) - Blue/indigo cool dark (text: blue-50)
+
+**Spacing**:
+- Editorial spacing: py-16
+- Magazine gaps: gap-10
+- Minimal padding: p-8
+
+**Key Components**:
+```jsx
+// Film Grain Texture (SVG)
+<div className="absolute inset-0 opacity-20 mix-blend-overlay">
+  <div style={{
+    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+  }}></div>
+</div>
+
+// Hero Content Positioning (Bottom-aligned)
+<section className="relative h-screen flex items-end px-8 pb-20">
+
+// Dramatic Dark Gradient
+<div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30"></div>
+
+// Ultra-thin Typography with Extreme Tracking
+<h1
+  className={`text-4xl md:text-6xl font-thin tracking-wider text-${palette.text}`}
+  style={{
+    fontFamily: "Helvetica Neue, Arial, sans-serif",
+    letterSpacing: "0.15em",
+    textTransform: "uppercase",
+  }}
+>
+
+// Minimal Hairline Accent
+<div className={`w-12 h-px bg-${palette.primary} mb-6`}></div>
+
+// Scroll Indicator
+<div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+  <div className="text-xs uppercase tracking-widest mb-2">Scroll</div>
+  <div className="w-px h-16 bg-white/40 mx-auto animate-pulse"></div>
+</div>
+
+// Magazine-Style Story Layout
+<div className="grid md:grid-cols-2 gap-10 items-center">
+  {/* Large pull quote on left */}
+  <div>
+    <div className={`w-16 h-px bg-${palette.primary} mb-6`}></div>
+    <h2 className="text-4xl font-thin leading-tight" style={{ lineHeight: 1.4 }}>
+      {data.story}
+    </h2>
+  </div>
+  {/* Editorial image on right */}
+  <div className="aspect-[3/4]">...</div>
+</div>
+
+// Minimal Details with Square Icons
+<div className={`w-16 h-16 border border-${palette.text}/20 flex items-center justify-center group-hover:border-${palette.primary}`}>
+  <Calendar className={`w-8 h-8 text-${palette.text}/60 group-hover:text-${palette.primary}`} />
+</div>
+
+// Timeline with Minimal Dots
+<div className="flex items-center gap-8">
+  <div className="text-3xl font-thin">{item.time}</div>
+  <div className={`w-2 h-2 rounded-full bg-${palette.text}/20 group-hover:bg-${palette.primary} group-hover:scale-150`}></div>
+  <p className="flex-1 text-xl font-light">{item.event}</p>
+  <div className="text-sm">{String(index + 1).padStart(2, "0")}</div>
+</div>
+
+// Full-Bleed Gallery (gap-1, no padding)
+<section className="py-16 px-0">
+  <div className="grid md:grid-cols-3 gap-1">
+    <div className="aspect-[4/5] bg-black">
+      <img className="opacity-90 group-hover:opacity-100 group-hover:scale-105" />
+      {/* Number overlay */}
+      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center">
+        <div className="text-white text-7xl font-thin opacity-40">
+          {String(index + 1).padStart(2, "0")}
+        </div>
+      </div>
+      {/* Image info bar */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 p-6">
+        <p className="text-white/60 text-xs uppercase tracking-widest">{photo.alt}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+// Dramatic RSVP CTA
+<section className="py-48 text-center">
+  <h2 className="text-4xl md:text-6xl font-thin uppercase tracking-[0.2em]">
+    Join Us
+  </h2>
+  <Button className="bg-transparent hover:bg-${palette.primary} text-${palette.text} hover:text-white border border-${palette.text}/30 px-20 py-8 text-sm uppercase tracking-[0.3em]">
+    RSVP
+  </Button>
+</section>
+```
+
+**Unique Features**:
+- **Dark backgrounds required**: All cinematic palettes use `900` backgrounds
+- **Light text required**: All text colors are `50` (near-white) for contrast
+- Film grain SVG overlay with `mix-blend-overlay`
+- Hero content at bottom (`items-end`) instead of center
+- Full-bleed gallery with minimal gaps (gap-1)
+- Magazine/editorial layout with aspect-[3/4] images
+- Numbered gallery overlays (01, 02, 03...)
+- Image info bars on hover
+- × symbol instead of & for separator
+- Dramatic py-48 on RSVP section
+
+---
+
+## Creating New Templates
+
+### Step-by-Step Template Creation Guide
+
+#### Step 1: Define Template Concept
+
+**Questions to answer:**
+1. What wedding style does this serve? (Cultural, venue-type, aesthetic)
+2. What emotions should it evoke?
+3. What's the target couple demographic?
+4. What makes it unique from existing templates?
+
+**Example:**
+```
+Template: "Desert/Southwest"
+Style: Southwestern, desert wedding, bohemian-luxe
+Emotions: Warmth, adventure, natural beauty
+Demographics: Couples getting married in Arizona, New Mexico, desert venues
+Unique: Terracotta colors, cacti motifs, sunset gradients
+```
+
+#### Step 2: Design Color Palettes
+
+Create **exactly 3 palettes** for the template:
+
+```javascript
+templatename: [
+  {
+    name: "Palette Name in Swedish",  // e.g., "Öken Solnedgång"
+    primary: "color-600",              // Main interactive color (500-700 range)
+    secondary: "color-500",            // Supporting color
+    accent: "color-400",               // Highlight color (lighter)
+    background: "color-50",            // Light background (50-100)
+    text: "color-900",                 // Dark text (800-950) for light bg
+  },
+  // Two more palettes...
+]
+```
+
+**Palette Rules:**
+- Use only valid Tailwind colors
+- Ensure high contrast (light bg → dark text, dark bg → light text)
+- Primary should be most saturated (500-700)
+- Background should be subtle (50-100 or 800-950)
+- Test all 5 colors work together visually
+
+**For Dark Backgrounds:**
+```javascript
+{
+  background: "slate-900",            // Dark (900)
+  text: "slate-50",                   // Light text (50-100)
+  primary: "blue-400",                // Lighter colors show on dark
+  secondary: "indigo-400",
+  accent: "cyan-300",
+}
+```
+
+#### Step 3: Choose Typography
+
+**Select font family:**
+```javascript
+// Serif (traditional, elegant, romantic)
+fontFamily: 'Georgia, serif'
+fontFamily: 'Playfair Display, serif'
+
+// Sans-serif (modern, clean, contemporary)
+fontFamily: 'Helvetica Neue, Arial, sans-serif'
+fontFamily: 'Source Sans 3, sans-serif'
+
+// Display (unique, playful, distinctive)
+fontFamily: 'Comic Sans MS, cursive, sans-serif'
+```
+
+**Define font weights:**
+```javascript
+font-thin       // 100 - Ultra-minimalist, elegant
+font-light      // 300 - Modern, airy
+font-normal     // 400 - Standard body
+font-semibold   // 600 - Emphasis
+font-bold       // 700 - Strong, playful
+```
+
+**Set letter-spacing:**
+```javascript
+tracking-tight      // -0.025em - Tight headings
+tracking-normal     // 0em - Default
+tracking-wide       // 0.025em - Elegant
+tracking-widest     // 0.1em - Uppercase labels
+tracking-[0.2em]    // Custom extreme (cinematic)
+```
+
+#### Step 4: Create Template Function
+
+```typescript
+function NewTemplateNameTemplate({
+  data,
+  palette,
+  sections,
+  uploadedImages,
+}: {
+  data: WeddingData
+  palette: ColorPalette
+  sections: SectionVisibility
+  uploadedImages: { [key: string]: string }
+}) {
+  return (
+    <div className={`font-sans text-${palette.text} bg-${palette.background} min-h-screen`}>
+      {/* Sections go here */}
+    </div>
+  )
+}
+```
+
+#### Step 5: Build Hero Section
+
+**Hero Structure:**
+```jsx
+{sections.hero && (
+  <section className="relative h-screen flex items-center justify-center text-center px-8 overflow-hidden">
+    {/* 1. Background Image */}
+    <div
+      className="absolute inset-0 bg-cover bg-center"
+      style={{
+        backgroundImage: `url(${uploadedImages["hero"] || data.gallery[0]?.url || "/default.jpg"})`,
+      }}
+    >
+      {/* 2. Gradient Overlay (for text readability) */}
+      <div className={`absolute inset-0 bg-gradient-to-b from-${palette.primary}/20 via-${palette.secondary}/30 to-${palette.text}/60`}></div>
+    </div>
+
+    {/* 3. Optional: Template-specific overlay (texture, pattern) */}
+    {/* Add unique visual element here */}
+
+    {/* 4. Content */}
+    <div className="relative z-10 max-w-5xl text-white">
+      {/* 5. Decorative element (icon, symbol) */}
+      <div className="mb-8">
+        {/* Add your unique decoration */}
+      </div>
+
+      {/* 6. Bride name */}
+      <h1 className="text-4xl md:text-5xl font-bold mb-6">
+        {data.bride}
+      </h1>
+
+      {/* 7. Separator (& or symbol) */}
+      <div className="text-5xl my-8">&</div>
+
+      {/* 8. Groom name */}
+      <h1 className="text-4xl md:text-5xl font-bold mb-6">
+        {data.groom}
+      </h1>
+
+      {/* 9. Date badge */}
+      <div className={`inline-block px-8 py-4 bg-white/20 backdrop-blur-md rounded-full mb-4`}>
+        <p className="text-2xl">{data.date}</p>
+      </div>
+
+      {/* 10. Venue (optional) */}
+      {data.venue && (
+        <p className="text-xl mb-6 italic">{data.venue}</p>
+      )}
+
+      {/* 11. CTA Button */}
+      <Button className={`bg-${palette.primary} hover:scale-105 transition-all`}>
+        OSA Nu
+      </Button>
+    </div>
+  </section>
+)}
+```
+
+#### Step 6: Build Story Section
+
+```jsx
+{sections.story && (
+  <section className={`py-16 px-8 bg-gradient-to-b from-white to-${palette.background}`}>
+    <div className="max-w-4xl mx-auto">
+      {/* Section header */}
+      <div className="text-center mb-8">
+        {/* Decorative icon */}
+        <Heart className={`w-12 h-12 mx-auto mb-6 text-${palette.primary}`} />
+
+        {/* Section title */}
+        <h2 className={`text-4xl font-light text-${palette.text} mb-4`}>
+          Vår Historia
+        </h2>
+
+        {/* Subtitle (optional) */}
+        <p className={`text-sm uppercase tracking-widest text-${palette.text}/60`}>
+          Där allt började...
+        </p>
+      </div>
+
+      {/* Story content card */}
+      <div className={`bg-white/80 backdrop-blur-sm p-10 rounded-3xl shadow-xl border border-${palette.primary}/20`}>
+        <p className={`text-xl leading-relaxed text-${palette.text}/90`}>
+          {data.story}
+        </p>
+      </div>
+    </div>
+  </section>
+)}
+```
+
+#### Step 7: Build Details Section (3-Column)
+
+```jsx
+{sections.details && (
+  <section className="py-16 px-8 bg-white">
+    <div className="max-w-6xl mx-auto">
+      <h2 className={`text-4xl text-center mb-10 text-${palette.text}`}>
+        Information
+      </h2>
+
+      <div className="grid md:grid-cols-3 gap-10">
+        {/* Date Card */}
+        <div className={`group text-center bg-${palette.background} p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}>
+          <div className={`w-20 h-20 mx-auto mb-6 rounded-full bg-${palette.primary}/10 flex items-center justify-center`}>
+            <Calendar className={`w-10 h-10 text-${palette.primary} group-hover:scale-110 transition-transform`} />
+          </div>
+          <h3 className={`text-2xl font-semibold mb-4 text-${palette.text}`}>Datum</h3>
+          <p className={`text-xl text-${palette.primary} mb-2`}>{data.date}</p>
+          <p className={`text-${palette.text}/70`}>{data.time}</p>
+        </div>
+
+        {/* Location Card */}
+        <div className={`group text-center bg-${palette.background} p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}>
+          <div className={`w-20 h-20 mx-auto mb-6 rounded-full bg-${palette.primary}/10 flex items-center justify-center`}>
+            <MapPin className={`w-10 h-10 text-${palette.primary} group-hover:scale-110 transition-transform`} />
+          </div>
+          <h3 className={`text-2xl font-semibold mb-4 text-${palette.text}`}>Plats</h3>
+          <p className={`text-xl text-${palette.primary} mb-2`}>{data.venue}</p>
+          <p className={`text-${palette.text}/70`}>{data.address}</p>
+        </div>
+
+        {/* Dresscode Card */}
+        <div className={`group text-center bg-${palette.background} p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}>
+          <div className={`w-20 h-20 mx-auto mb-6 rounded-full bg-${palette.primary}/10 flex items-center justify-center`}>
+            <Shirt className={`w-10 h-10 text-${palette.primary} group-hover:scale-110 transition-transform`} />
+          </div>
+          <h3 className={`text-2xl font-semibold mb-4 text-${palette.text}`}>Klädkod</h3>
+          <p className={`text-xl text-${palette.primary}`}>{data.dresscode}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+```
+
+#### Step 8: Build Timeline Section
+
+```jsx
+{sections.timeline && (
+  <section className={`py-16 px-8 bg-${palette.background}`}>
+    <div className="max-w-4xl mx-auto">
+      <div className="text-center mb-10">
+        <Clock className={`w-12 h-12 mx-auto mb-6 text-${palette.primary}`} />
+        <h2 className={`text-4xl text-${palette.text}`}>Tidslinje</h2>
+      </div>
+
+      <div className="relative">
+        {/* Connecting line */}
+        <div className={`absolute left-12 top-0 bottom-0 w-0.5 bg-gradient-to-b from-${palette.primary}/20 via-${palette.primary} to-${palette.primary}/20`}></div>
+
+        <div className="space-y-8">
+          {data.timeline.map((item, index) => (
+            <div key={index} className="relative flex items-start gap-8 group">
+              {/* Time */}
+              <div className={`text-3xl font-bold text-${palette.primary} w-24 text-right`}>
+                {item.time}
+              </div>
+
+              {/* Marker */}
+              <div className="relative">
+                <div className={`w-6 h-6 rounded-full bg-${palette.primary} border-4 border-white shadow-lg group-hover:scale-125 transition-transform`}></div>
+                <div className={`absolute inset-0 rounded-full bg-${palette.primary} animate-ping opacity-30`}></div>
+              </div>
+
+              {/* Event card */}
+              <div className={`flex-1 bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all`}>
+                <p className={`text-xl text-${palette.text}`}>{item.event}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+```
+
+#### Step 9: Build Gallery Section
+
+```jsx
+{sections.gallery && (
+  <section className="py-16 px-8 bg-white">
+    <div className="max-w-6xl mx-auto">
+      <div className="text-center mb-10">
+        <Camera className={`w-12 h-12 mx-auto mb-6 text-${palette.primary}`} />
+        <h2 className={`text-4xl text-${palette.text}`}>Galleri</h2>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-8">
+        {data.gallery.map((photo, index) => (
+          <div
+            key={index}
+            className="group relative aspect-square overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500"
+          >
+            <img
+              src={uploadedImages[`gallery-${index}`] || photo.url}
+              alt={photo.alt}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+
+            {/* Overlay on hover */}
+            <div className={`absolute inset-0 bg-gradient-to-t from-${palette.primary}/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center`}>
+              {/* Add your decorative element */}
+              <Heart className="w-16 h-16 text-white" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+```
+
+#### Step 10: Add to Templates Array
+
+```javascript
+const templates = [
+  // ... existing templates
+  { id: "newtemplate", name: "New Template Name" },
+]
+```
+
+#### Step 11: Add to renderTemplate Switch
+
+```javascript
+const renderTemplate = () => {
+  const templateProps = {
+    data: weddingData,
+    palette: currentPalette,
+    sections: sectionVisibility,
+    uploadedImages: uploadedImages,
+  }
+
+  switch (selectedTemplate) {
+    // ... existing cases
+    case "newtemplate":
+      return <NewTemplateNameTemplate {...templateProps} />
+    default:
+      return <RomanticTemplate {...templateProps} />
+  }
+}
+```
+
+---
+
+## Best Practices
+
+### 1. Always Use Palette Variables
+
+```jsx
+// ✅ CORRECT
+<div className={`text-${palette.primary} bg-${palette.background}`}>
+
+// ❌ INCORRECT
+<div className="text-rose-600 bg-rose-50">
+```
+
+**Exception**: Whimsical template uses hardcoded multi-colors intentionally for playful effect.
+
+### 2. Check Section Visibility
+
+```jsx
+// ✅ CORRECT
+{sections.hero && (
+  <section>...</section>
+)}
+
+// ❌ INCORRECT
+<section>...</section>  // Always renders
+```
+
+### 3. Provide Image Fallbacks
+
+```jsx
+// ✅ CORRECT
+uploadedImages["hero"] || data.gallery[0]?.url || "/default.jpg"
+
+// ❌ INCORRECT
+uploadedImages["hero"]  // May be undefined
+```
+
+### 4. Use Semantic HTML
+
+```jsx
+// ✅ CORRECT
+<section>
+  <h2>Section Title</h2>
+  <article>...</article>
+</section>
+
+// ❌ INCORRECT
+<div>
+  <div>Section Title</div>
+  <div>...</div>
+</div>
+```
+
+### 5. Implement Hover States
+
+```jsx
+// ✅ CORRECT
+<div className="hover:scale-110 hover:shadow-xl transition-all duration-300">
+
+// ❌ INCORRECT
+<div className="scale-110">  // No interaction feedback
+```
+
+### 6. Use Group Hover Patterns
+
+```jsx
+// ✅ CORRECT
+<div className="group">
+  <Icon className="group-hover:scale-110" />
+  <Text className="group-hover:text-primary" />
+</div>
+
+// Less optimal
+<div className="hover:scale-110">
+  <Icon className="hover:scale-110" />  // Both need hover state
+  <Text className="hover:text-primary" />
+</div>
+```
+
+### 7. GPU-Accelerated Animations
+
+```jsx
+// ✅ CORRECT - GPU accelerated
+transform
+opacity
+translate
+scale
+rotate
+
+// ❌ AVOID - Layout thrashing
+margin
+padding
+width
+height
+top/left/bottom/right
+```
+
+### 8. Consistent Spacing Rhythm
+
+```jsx
+// ✅ CORRECT - Follows 4px system
+py-16  // 64px
+mb-10  // 40px
+gap-8  // 32px
+p-6    // 24px
+
+// ❌ INCORRECT - Breaks rhythm
+py-17  // 68px (not in system)
+mb-11  // 44px (not in system)
+```
+
+### 9. Responsive Design Patterns
+
+```jsx
+// ✅ CORRECT
+<h1 className="text-4xl md:text-5xl">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+// ❌ INCORRECT
+<h1 className="text-5xl">  // Too large on mobile
+<div className="grid grid-cols-3">  // Breaks on mobile
+```
+
+### 10. Accessibility
+
+```jsx
+// ✅ CORRECT
+<img src={photo.url} alt={photo.alt} />
+<button className="min-w-[44px] min-h-[44px]">  // Tap target
+<a className="focus:ring-2 focus:ring-offset-2">
+
+// ❌ INCORRECT
+<img src={photo.url} />  // No alt text
+<button className="w-8 h-8">  // Too small
+<a>  // No focus state
+```
+
+### 11. Performance
+
+```jsx
+// ✅ CORRECT
+<img loading="lazy" />
+<div className="transform-gpu">  // Forces GPU
+
+// Future optimization
+<Image src={photo.url} width={800} height={600} />  // Next.js Image
+```
+
+### 12. Testing Checklist
+
+Before considering a template complete:
+
+- [ ] All 3 palettes render correctly
+- [ ] Light palettes have dark text (good contrast)
+- [ ] Dark palettes have light text (good contrast)
+- [ ] All sections respect `sections` visibility prop
+- [ ] Images have proper fallbacks
+- [ ] Hover states work on all interactive elements
+- [ ] Mobile responsive (test at 375px, 768px, 1024px)
+- [ ] Animations are smooth (60fps)
+- [ ] No console errors
+- [ ] Text is readable on all backgrounds
+- [ ] Icons scale properly on hover
+- [ ] Cards have proper shadows/depth
+- [ ] Spacing feels consistent
+- [ ] Typography hierarchy is clear
+- [ ] Template has unique personality
+- [ ] Matches design philosophy
+
+---
+
+## Quick Reference
+
+### Common Tailwind Classes
+
+```javascript
+// Spacing
+py-16, px-8, mb-10, gap-8, p-8
+
+// Typography
+text-4xl, font-bold, tracking-wide, leading-relaxed
+
+// Colors
+text-${palette.primary}, bg-${palette.background}
+
+// Shadows
+shadow-lg, shadow-xl, shadow-2xl
+
+// Borders
+border, border-2, border-4, rounded-3xl, rounded-full
+
+// Transitions
+transition-all, duration-300, duration-500
+
+// Transforms
+scale-110, translate-y-2, rotate-45
+
+// Opacity
+opacity-90, hover:opacity-100
+
+// Backdrop
+backdrop-blur-sm, backdrop-blur-md
+
+// Positioning
+relative, absolute, inset-0, z-10
+
+// Layout
+grid, grid-cols-3, gap-8, flex, items-center, justify-center
+
+// Responsive
+md:text-5xl, md:grid-cols-3, md:flex-row
+```
+
+### Animation Durations
+
+```javascript
+duration-300     // Quick interactions (hover, scale)
+duration-500     // Medium animations (fade, slide)
+duration-700     // Slow animations (image zoom)
+duration-1000    // Entrance animations
+```
+
+### Common Lucide Icons
+
+```javascript
+Calendar, MapPin, Clock, Camera, Heart, Users, Shirt,
+HelpCircle, Gift, Home, Upload, X, BookOpen, ImageIcon
+```
+
+---
+
+## Conclusion
+
+This design system provides a complete foundation for understanding, maintaining, and creating new wedding templates. Each template follows consistent patterns while expressing unique personalities through careful attention to:
+
+1. **Color palettes** - 3 per template, palette-system driven
+2. **Typography** - Font family, weight, spacing choices
+3. **Spacing** - Consistent 4px rhythm system
+4. **Components** - Reusable section patterns
+5. **Animations** - GPU-accelerated, smooth transitions
+6. **Accessibility** - Contrast, tap targets, semantics
+
+By following these guidelines, new templates can be created that feel cohesive with the existing system while bringing fresh, unique design perspectives to serve diverse couples and wedding styles.
+
+**Current Templates**: 12 (Romantic, Modern, Vintage, Elegant, Bohemian, Minimalist, Garden, Art Deco, Beach, Rustic, Whimsical, Cinematic)
+
+**Total Color Palettes**: 36 (12 templates × 3 palettes each)
+
+**System Status**: Production-ready, fully documented, scalable architecture.
+
+---
+
+*Last Updated: 2025-10-07*
+*Version: 2.0 (Post-compaction)*
