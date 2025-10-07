@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createRouteSupabaseClient } from '@/lib/supabase-server'
 import { createClient } from '@supabase/supabase-js'
-import { resend } from '@/lib/resend'
+import { getResendClient } from '@/lib/resend'
 import { RSVPNotificationEmail } from '@/lib/emails/rsvp-notification'
 import { render } from '@react-email/render'
 
@@ -139,11 +139,7 @@ async function sendEmailNotification({
   dietaryRestrictions?: string
   message?: string
 }) {
-  // Skip if no RESEND_API_KEY
-  if (!process.env.RESEND_API_KEY) {
-    console.log('Skipping email: RESEND_API_KEY not configured')
-    return
-  }
+  // Check will be done when we call getResendClient()
 
   // Get owner's email using our custom SQL function
   const { data: ownerEmail, error: emailError } = await supabase
@@ -174,8 +170,16 @@ async function sendEmailNotification({
     })
   )
 
+  // Get Resend client (will be null if API key not configured)
+  const resendClient = getResendClient()
+  
+  if (!resendClient) {
+    console.log('⚠️  Skipping email: Resend client not available')
+    return
+  }
+
   // Send email
-  await resend.emails.send({
+  await resendClient.emails.send({
     from: 'Bröllopssidan <notifications@bröllopssidan.se>',
     to: ownerEmail,
     subject: `Nytt OSA-svar från ${guestName}`,
