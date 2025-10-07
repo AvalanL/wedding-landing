@@ -12,7 +12,15 @@ type SupabaseProviderProps = {
 }
 
 export function SupabaseProvider({ children, session }: SupabaseProviderProps) {
-  const [supabaseClient] = useState(createSupabaseBrowserClient)
+  // Lazy initialization - only create client in browser, not during SSR/build
+  const [supabaseClient] = useState(() => {
+    // During build/SSR, window is undefined
+    if (typeof window === 'undefined') {
+      // Return a mock client that won't be used
+      return null as any
+    }
+    return createSupabaseBrowserClient()
+  })
 
   return (
     <SessionContextProvider supabaseClient={supabaseClient} initialSession={session}>
