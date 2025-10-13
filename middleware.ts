@@ -31,7 +31,7 @@ export function middleware(request: NextRequest) {
     if (hasSubdomain) {
       const subdomain = parts[0]
       const url = request.nextUrl.clone()
-      url.pathname = `/sites/${subdomain}${pathname === "/" ? "" : pathname}`
+      url.pathname = `/sites/${subdomain}`
       return NextResponse.rewrite(url)
     }
     
@@ -46,7 +46,7 @@ export function middleware(request: NextRequest) {
     }
 
     const url = request.nextUrl.clone()
-    url.pathname = `/sites/${subdomain}${pathname === "/" ? "" : pathname}`
+    url.pathname = `/sites/${subdomain}`
     return NextResponse.rewrite(url)
   }
 
