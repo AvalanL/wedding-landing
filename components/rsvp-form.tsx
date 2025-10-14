@@ -181,7 +181,21 @@ export function RSVPForm({ siteId, deadline, palette, className = '' }: RSVPForm
             max="10"
             required
             value={formData.number_of_guests}
-            onChange={(e) => setFormData({ ...formData, number_of_guests: parseInt(e.target.value) || 1 })}
+            onChange={(e) => {
+              const value = e.target.value
+              // Allow empty string for better UX while typing
+              if (value === '') {
+                setFormData({ ...formData, number_of_guests: 1 })
+                return
+              }
+              
+              const parsed = parseInt(value, 10)
+              // Validate the number is within acceptable range
+              if (!isNaN(parsed) && parsed >= 1 && parsed <= 10) {
+                setFormData({ ...formData, number_of_guests: parsed })
+              }
+              // If invalid, ignore the input (keep current value)
+            }}
             className="mt-1 rounded-2xl"
           />
           <p className="text-xs mt-1" style={{ color: '#1F1C14', opacity: 0.6 }}>
