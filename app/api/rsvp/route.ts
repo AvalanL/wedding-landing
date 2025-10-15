@@ -81,10 +81,16 @@ export async function POST(request: Request) {
     }
 
     // Send email notification (async, don't block response)
-    // Create a new client with proper auth for RPC call
+    // Use service role client for elevated permissions to access user emails
     const emailSupabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
     )
     
     sendEmailNotification({
