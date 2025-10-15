@@ -43,6 +43,7 @@ import {
   Shirt,
   Globe2,
   MessageSquare,
+  ArrowLeft,
 } from "lucide-react"
 
 export const colorPalettes = {
@@ -2738,8 +2739,8 @@ export default function WeddingEditor({
             className="flex items-center gap-2 hover:bg-opacity-10"
             style={{ color: '#B26D4A' }}
           >
-            <Heart className="h-4 w-4" />
-            <span className="text-lg font-semibold">Bröllopssidan.se</span>
+            <ArrowLeft className="h-4 w-4" />
+            <span className="font-medium">Tillbaka till översikt</span>
           </Button>
           <div className="text-sm" style={{ color: '#1F1C14', opacity: 0.6 }}>
             {templates.find((t) => t.id === selectedTemplate)?.name} • {currentPalette.name}
@@ -3752,11 +3753,13 @@ export function ModernTemplate({
   palette,
   sections,
   uploadedImages, // Receive uploadedImages
+  siteId,
 }: {
   data: WeddingData
   palette: ColorPalette
   sections: SectionVisibility
   uploadedImages: { [key: string]: string }
+  siteId?: string | null
 }) {
   return (
     <div className={`font-sans text-${palette.text} bg-white min-h-screen`}>
@@ -3961,11 +3964,13 @@ export function VintageTemplate({
   palette,
   sections,
   uploadedImages, // Receive uploadedImages
+  siteId,
 }: {
   data: WeddingData
   palette: ColorPalette
   sections: SectionVisibility
   uploadedImages: { [key: string]: string }
+  siteId?: string | null
 }) {
   return (
     <div className={`font-serif text-${palette.text} bg-${palette.background} min-h-screen`}>
@@ -4416,11 +4421,13 @@ export function BohemianTemplate({
   palette,
   sections,
   uploadedImages, // Receive uploadedImages
+  siteId,
 }: {
   data: WeddingData
   palette: ColorPalette
   sections: SectionVisibility
   uploadedImages: { [key: string]: string }
+  siteId?: string | null
 }) {
   return (
     <div className={`font-sans text-${palette.text} bg-gradient-to-b from-green-50 to-emerald-50 min-h-screen`}>

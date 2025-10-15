@@ -49,6 +49,7 @@ export default function DashboardPage() {
   const [sites, setSites] = useState<Site[]>([])
   const [loading, setLoading] = useState(true)
   const [activeView, setActiveView] = useState('overview')
+  const baseDomain = process.env.NEXT_PUBLIC_BASE_DOMAIN || 'bröllopssidan.se'
 
   const menuItems: MenuItem[] = [
     { id: 'overview', label: 'Översikt', icon: LayoutDashboard, href: '/dashboard' },
@@ -391,7 +392,7 @@ export default function DashboardPage() {
                         )}
                         <div className="flex items-center gap-2 text-sm" style={{ color: '#1F1C14', opacity: 0.7 }}>
                           <Globe2 className="h-4 w-4" />
-                          <span className="truncate">{site.slug}.bröllopssidan.se</span>
+                          <span className="truncate">{site.slug}.{baseDomain}</span>
                         </div>
                       </div>
 
@@ -422,7 +423,7 @@ export default function DashboardPage() {
                         <Button
                           onClick={(e) => {
                             e.stopPropagation()
-                            window.open(`https://${site.slug}.bröllopssidan.se`, '_blank')
+                            window.open(`https://${site.slug}.${baseDomain}`, '_blank')
                           }}
                           variant="outline"
                           className="text-sm"
