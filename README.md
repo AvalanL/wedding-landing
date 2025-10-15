@@ -146,7 +146,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJxxx...
 SUPABASE_ANON_KEY=eyJxxx...
 
 # App URLs
-NEXT_PUBLIC_BASE_DOMAIN=website.com
+NEXT_PUBLIC_BASE_DOMAIN=app.website.com
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 # Email (Resend)
@@ -191,7 +191,25 @@ View and manage all RSVPs:
 
 ## 🚀 Deployment
 
-### Deploy to Vercel
+### Deploy to Railway (Recommended)
+
+See **[RAILWAY_DEPLOYMENT.md](./RAILWAY_DEPLOYMENT.md)** for complete guide including:
+- Railway setup and configuration
+- **Wildcard subdomain DNS setup** (critical for user subdomains!)
+- SSL certificate provisioning
+- Environment variables
+- Troubleshooting tips
+
+**Quick Reference:** [DNS_QUICKSTART.md](./DNS_QUICKSTART.md) - DNS configuration for all major providers
+
+Quick start:
+```bash
+railway init
+railway up
+# Configure DNS with wildcard: *.app.yourdomain.com → Railway
+```
+
+### Deploy to Vercel (Alternative)
 
 ```bash
 # Install Vercel CLI
@@ -201,16 +219,17 @@ pnpm i -g vercel
 vercel
 
 # Add environment variables in Vercel dashboard
-# Set up custom domain
+# Set up custom domain + wildcard domain (*.app.yourdomain.com)
 ```
 
 ### Subdomain Routing
 
 The middleware handles subdomain routing:
 - `yourdomain.com` → Main app (dashboard/editor)
-- `bengt.yourdomain.com` → Published wedding site for "bengt"
+- `bengt.app.yourdomain.com` → Published wedding site for "bengt"
+- `*.app.yourdomain.com` → Any user's published wedding site
 
-Set `NEXT_PUBLIC_BASE_DOMAIN` to your domain.
+**Critical:** Set `NEXT_PUBLIC_BASE_DOMAIN` to `app.yourdomain.com` (no `https://`, no port).
 
 ## 📝 License
 

@@ -2276,7 +2276,7 @@ export default function WeddingEditor({
   const session = useSession()
   const router = useRouter()
   const user = session?.user
-  const baseDomain = process.env.NEXT_PUBLIC_BASE_DOMAIN ?? "website.com"
+  const baseDomain = process.env.NEXT_PUBLIC_BASE_DOMAIN ?? "app.website.com"
 
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("romantic")
   const [selectedPalette, setSelectedPalette] = useState(0)

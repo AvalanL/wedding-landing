@@ -1,7 +1,7 @@
 # 🧪 Lokal Subdomain-testning
 
 ## Problem
-Du vill testa subdomäner (t.ex. `bengt.bröllopssidan.se`) lokalt innan deploy.
+Du vill testa subdomäner (t.ex. `bengt.app.bröllopssidan.se`) lokalt innan deploy.
 
 ## Lösning
 Jag har uppdaterat `middleware.ts` för att hantera lokala subdomäner!
@@ -48,7 +48,7 @@ Om din browser inte stöder `.localhost` kan du använda `localhost.direct`:
 ### Steg:
 1. **Uppdatera `.env.local`:**
    ```bash
-   NEXT_PUBLIC_BASE_DOMAIN=localhost.direct:3000
+   NEXT_PUBLIC_BASE_DOMAIN=app.localhost.direct:3000
    ```
 
 2. **Starta om servern:**
@@ -90,7 +90,7 @@ För att simulera riktiga domäner:
 
 4. **Uppdatera `.env.local`:**
    ```bash
-   NEXT_PUBLIC_BASE_DOMAIN=brollopssidan.local:3000
+   NEXT_PUBLIC_BASE_DOMAIN=app.brollopssidan.local:3000
    ```
 
 5. **Starta om servern**
@@ -214,7 +214,7 @@ När du deploya till Vercel/production:
 
 1. **Uppdatera `.env` på Vercel:**
    ```
-   NEXT_PUBLIC_BASE_DOMAIN=bröllopssidan.se
+   NEXT_PUBLIC_BASE_DOMAIN=app.bröllopssidan.se
    ```
 
 2. **Konfigurera DNS:**

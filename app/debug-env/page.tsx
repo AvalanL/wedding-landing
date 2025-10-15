@@ -46,8 +46,8 @@ export default function DebugEnvPage() {
         <div className="mt-6 p-4 bg-gray-50 rounded border">
           <h3 className="font-bold mb-2">📝 Expected Values:</h3>
           <ul className="text-sm space-y-1">
-            <li>✅ NEXT_PUBLIC_APP_URL: <code>https://app.bröllopssidan.se</code></li>
-            <li>✅ NEXT_PUBLIC_BASE_DOMAIN: <code>bröllopssidan.se</code></li>
+            <li>✅ NEXT_PUBLIC_APP_URL: <code>https://bröllopssidan.se</code></li>
+            <li>✅ NEXT_PUBLIC_BASE_DOMAIN: <code>app.bröllopssidan.se</code> (or <code>app.xn--brllopssidan-5ib.se</code>)</li>
             <li>✅ NEXT_PUBLIC_SUPABASE_URL: <code>https://ogvcyvuhkinyiymqnwln.supabase.co</code></li>
           </ul>
         </div>
