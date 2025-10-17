@@ -237,7 +237,7 @@ export const RSVPNotificationEmail = ({
                           lineHeight: '1.5',
                           fontStyle: 'italic'
                         }}>
-                          "{message}"
+                          &ldquo;{message}&rdquo;
                         </div>
                       </div>
                     )}
