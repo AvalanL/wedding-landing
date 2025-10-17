@@ -643,6 +643,16 @@ export function MinimalistTemplate({
           </div>
         </section>
       )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
+      )}
     </div>
   )
 }
@@ -851,6 +861,16 @@ export function GardenTemplate({
             </div>
           </div>
         </section>
+      )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
       )}
     </div>
   )
@@ -1155,6 +1175,16 @@ export function ArtDecoTemplate({
           </div>
         </section>
       )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
+      )}
     </div>
   )
 }
@@ -1396,6 +1426,16 @@ export function BeachTemplate({
             </div>
           </div>
         </section>
+      )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
       )}
     </div>
   )
@@ -1863,6 +1903,16 @@ export function RusticTemplate({
           </div>
         </section>
       )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
+      )}
     </div>
   )
 }
@@ -2313,6 +2363,16 @@ export function WhimsicalTemplate({
             </div>
           </div>
         </section>
+      )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
       )}
     </div>
   )
@@ -2898,85 +2958,12 @@ export default function WeddingEditor({
     }))
   }
 
+  // All hooks must be called before any early returns
   useEffect(() => {
     if (mode === "editor" && !session) {
       router.push('/login')
     }
   }, [mode, session, router])
-
-  if (mode === "editor" && !session) {
-    return null
-  }
-
-  const paletteChoices = colorPalettes[selectedTemplate] ?? colorPalettes.romantic
-  const currentPalette = paletteChoices[selectedPalette] ?? paletteChoices[0]
-
-  const sections = [
-    { id: "couple", label: "Par", icon: Heart },
-    { id: "details", label: "Detaljer", icon: Calendar },
-    { id: "story", label: "Historia", icon: Edit3 },
-    { id: "timeline", label: "Tidslinje", icon: Clock },
-    { id: "gallery", label: "Galleri", icon: Camera },
-    { id: "faq", label: "FAQ", icon: HelpCircle },
-    { id: "registry", label: "Önskelista", icon: Gift },
-    { id: "accommodation", label: "Boende", icon: Home },
-    { id: "rsvp", label: "OSA", icon: UserCheck }, // Added RSVP section
-  ]
-
-  const toggleSection = (section: string) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }))
-  }
-
-  const toggleSectionVisibility = (section: keyof SectionVisibility) => {
-    setSectionVisibility((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }))
-  }
-
-  const buildSnapshot = (): EditorSnapshot => ({
-    weddingData,
-    sectionVisibility,
-    selectedTemplate,
-    selectedPalette,
-    uploadedImages,
-  })
-
-  const applySnapshot = (snapshot: Partial<EditorSnapshot> | null) => {
-    if (!snapshot) return
-
-    if (snapshot.weddingData) {
-      setWeddingData((prev) => ({
-        ...prev,
-        ...snapshot.weddingData,
-        timeline: snapshot.weddingData.timeline ?? prev.timeline,
-        gallery: snapshot.weddingData.gallery ?? prev.gallery,
-        faq: snapshot.weddingData.faq ?? prev.faq,
-      }))
-    }
-
-    if (snapshot.sectionVisibility) {
-      setSectionVisibility((prev) => ({
-        ...prev,
-        ...snapshot.sectionVisibility,
-      }))
-    }
-
-    if (typeof snapshot.selectedTemplate === "string") {
-      setSelectedTemplate(snapshot.selectedTemplate as TemplateId)
-    }
-
-    if (typeof snapshot.selectedPalette === "number" && !Number.isNaN(snapshot.selectedPalette)) {
-      setSelectedPalette(snapshot.selectedPalette)
-    }
-
-    if (snapshot.uploadedImages) {
-      setUploadedImages(snapshot.uploadedImages)
-    }
-  }
 
   useEffect(() => {
     if (mode !== "editor" || !session) {
@@ -3024,6 +3011,14 @@ export default function WeddingEditor({
     }
   }, [mode, session])
 
+  useEffect(() => {
+    if (!initialSnapshot) {
+      return
+    }
+
+    applySnapshot(initialSnapshot)
+  }, [initialSnapshot])
+
   const fetchSiteBySlug = async (slug: string) => {
     if (mode !== "editor") {
       return
@@ -3068,14 +3063,6 @@ export default function WeddingEditor({
       setIsLoadingSite(false)
     }
   }
-
-  useEffect(() => {
-    if (!initialSnapshot) {
-      return
-    }
-
-    applySnapshot(initialSnapshot)
-  }, [initialSnapshot])
 
   const persistSite = async (publish: boolean) => {
     if (mode !== "editor") {
@@ -3955,6 +3942,16 @@ export default function WeddingEditor({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
+      )}
     </div>
   )
 }
@@ -4038,13 +4035,13 @@ export function RomanticTemplate({
               <p className="text-lg text-gray-500 italic">Där allt började...</p>
             </div>
             <div className="relative">
-              <div className={`absolute -left-4 top-0 text-4xl text-${palette.primary}/20 font-serif leading-none`}>"</div>
+              <div className={`absolute -left-4 top-0 text-4xl text-${palette.primary}/20 font-serif leading-none`}>&ldquo;</div>
               <div className={`bg-white/80 backdrop-blur-sm p-8 md:p-10 rounded-3xl shadow-xl border border-${palette.primary}/10`}>
                 <p className={`text-xl md:text-2xl leading-relaxed text-${palette.text}/90 text-center font-light`} style={{ lineHeight: '1.8' }}>
                   {data.story}
                 </p>
               </div>
-              <div className={`absolute -right-4 bottom-0 text-4xl text-${palette.primary}/20 font-serif leading-none`}>"</div>
+              <div className={`absolute -right-4 bottom-0 text-4xl text-${palette.primary}/20 font-serif leading-none`}>&rdquo;</div>
             </div>
           </div>
         </section>
@@ -4218,6 +4215,16 @@ export function RomanticTemplate({
             </div>
           </div>
         </section>
+      )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
       )}
     </div>
   )
@@ -4430,6 +4437,16 @@ export function ModernTemplate({
           </div>
         </section>
       )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
+      )}
     </div>
   )
 }
@@ -4640,6 +4657,16 @@ export function VintageTemplate({
             </div>
           </div>
         </section>
+      )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
       )}
     </div>
   )
@@ -4887,6 +4914,16 @@ export function ElegantTemplate({
           </div>
         </section>
       )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
+      )}
     </div>
   )
 }
@@ -5070,6 +5107,16 @@ export function BohemianTemplate({
             </div>
           </div>
         </section>
+      )}
+
+      {/* Floating RSVP Button */}
+      {sections.rsvp && (
+        <a
+          href="#rsvp"
+          className={`fixed bottom-8 right-8 bg-${palette.primary} hover:bg-${palette.primary}/90 text-white px-8 py-4 rounded-full shadow-2xl hover:shadow-${palette.primary}/50 transition-all duration-300 hover:scale-110 z-50 font-semibold text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center`}
+        >
+          OSA Nu ♥
+        </a>
       )}
     </div>
   )
