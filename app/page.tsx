@@ -1298,6 +1298,105 @@ export function BeachTemplate({
           </div>
         </section>
       )}
+
+      {sections.faq && data.faq.length > 0 && (
+        <section className={`py-16 px-8 bg-gradient-to-b from-white to-${palette.background}`}>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-10">
+              <HelpCircle className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl font-light text-${palette.text}`}>Vanliga Frågor</h2>
+            </div>
+            <div className="space-y-4">
+              {data.faq.map((item, index) => (
+                <details
+                  key={index}
+                  className={`group bg-white p-8 rounded-3xl shadow-md hover:shadow-xl transition-all border-2 border-${palette.primary}/10`}
+                >
+                  <summary className={`cursor-pointer flex items-center justify-between text-xl font-semibold text-${palette.text} list-none`}>
+                    {item.question}
+                    <span className="ml-4 transform group-open:rotate-180 transition-transform text-${palette.primary}">
+                      ▼
+                    </span>
+                  </summary>
+                  <p className={`mt-6 text-lg text-${palette.text}/80 leading-relaxed`}>
+                    {item.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.registry && data.giftRegistry && (
+        <section className="py-16 px-8 bg-white">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="mb-10">
+              <Gift className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl font-light text-${palette.text}`}>Önskelista</h2>
+            </div>
+            <div className={`bg-gradient-to-br from-${palette.background} to-${palette.primary}/10 p-10 rounded-3xl shadow-xl border-2 border-${palette.primary}/20`}>
+              <p className={`text-xl leading-relaxed text-${palette.text}/90`}>
+                {data.giftRegistry}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.accommodation && data.accommodation && (
+        <section className={`py-16 px-8 bg-gradient-to-b from-white to-${palette.background}`}>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-10">
+              <Home className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl font-light text-${palette.text}`}>Boende</h2>
+            </div>
+            <div className={`bg-white p-10 rounded-3xl shadow-lg border-2 border-${palette.primary}/10`}>
+              <p className={`text-xl leading-relaxed text-${palette.text}/90 text-center`}>
+                {data.accommodation}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.rsvp && (
+        <section className="py-16 px-8 bg-white">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-10">
+              <UserCheck className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl font-light text-${palette.text}`}>OSA</h2>
+              {data.rsvpDeadline && (
+                <p className={`text-lg text-${palette.text}/60 mt-2`}>
+                  Svara senast {data.rsvpDeadline}
+                </p>
+              )}
+            </div>
+            <div className={`bg-gradient-to-br from-${palette.background} to-${palette.primary}/10 p-10 rounded-3xl shadow-xl border-2 border-${palette.primary}/20`}>
+              {data.rsvpMessage && (
+                <p className={`text-lg leading-relaxed text-${palette.text}/80 mb-8 text-center`}>
+                  {data.rsvpMessage}
+                </p>
+              )}
+              {siteId ? (
+                <RSVPForm
+                  siteId={siteId}
+                  deadline={data.rsvpDeadline}
+                  palette={{
+                    primary: `#${palette.primary.replace(/[^0-9a-fA-F]/g, '')}`,
+                    secondary: `#${palette.secondary.replace(/[^0-9a-fA-F]/g, '')}`,
+                    accent: `#${palette.accent.replace(/[^0-9a-fA-F]/g, '')}`,
+                  }}
+                />
+              ) : (
+                <div className={`p-8 rounded-2xl text-center bg-${palette.accent}/20`}>
+                  <p className={`text-${palette.text}`}>OSA-formuläret visas här när sidan är publicerad</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   )
 }
@@ -1637,6 +1736,133 @@ export function RusticTemplate({
           </div>
         </section>
       )}
+
+      {sections.faq && data.faq.length > 0 && (
+        <section className="py-16 px-8 bg-gradient-to-b from-amber-50 to-orange-50">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <HelpCircle className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl md:text-4xl font-light text-${palette.text} mb-4`} style={{ fontFamily: 'Georgia, serif' }}>
+                Vanliga Frågor
+              </h2>
+              <div className="flex items-center justify-center gap-6 mt-6">
+                <div className={`w-24 h-px bg-${palette.primary}`}></div>
+                <div className={`text-4xl text-${palette.primary}`}>❋</div>
+                <div className={`w-24 h-px bg-${palette.primary}`}></div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              {data.faq.map((item, index) => (
+                <details
+                  key={index}
+                  className={`group bg-amber-50/80 backdrop-blur-sm p-8 rounded-none shadow-md hover:shadow-xl transition-all border-2 border-${palette.primary}/20`}
+                >
+                  <summary className={`cursor-pointer flex items-center justify-between text-xl font-semibold text-${palette.text} list-none`} style={{ fontFamily: 'Georgia, serif' }}>
+                    {item.question}
+                    <span className="ml-4 transform group-open:rotate-180 transition-transform text-${palette.primary}">
+                      ❋
+                    </span>
+                  </summary>
+                  <p className={`mt-6 text-lg text-${palette.text}/80 leading-relaxed`}>
+                    {item.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.registry && data.giftRegistry && (
+        <section className="py-16 px-8 bg-gradient-to-b from-orange-50 to-amber-50">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="mb-8">
+              <Gift className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl md:text-4xl font-light text-${palette.text} mb-4`} style={{ fontFamily: 'Georgia, serif' }}>
+                Önskelista
+              </h2>
+              <div className="flex items-center justify-center gap-6 mt-6">
+                <div className={`w-24 h-px bg-${palette.primary}`}></div>
+                <div className={`text-4xl text-${palette.primary}`}>❋</div>
+                <div className={`w-24 h-px bg-${palette.primary}`}></div>
+              </div>
+            </div>
+            <div className={`bg-amber-50/80 backdrop-blur-sm p-10 rounded-none shadow-xl border-4 border-amber-100`}>
+              <p className={`text-xl leading-relaxed text-${palette.text}/90`}>
+                {data.giftRegistry}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.accommodation && data.accommodation && (
+        <section className="py-16 px-8 bg-gradient-to-b from-amber-50 to-orange-50">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <Home className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl md:text-4xl font-light text-${palette.text} mb-4`} style={{ fontFamily: 'Georgia, serif' }}>
+                Boende
+              </h2>
+              <div className="flex items-center justify-center gap-6 mt-6">
+                <div className={`w-24 h-px bg-${palette.primary}`}></div>
+                <div className={`text-4xl text-${palette.primary}`}>❋</div>
+                <div className={`w-24 h-px bg-${palette.primary}`}></div>
+              </div>
+            </div>
+            <div className={`bg-amber-50/80 backdrop-blur-sm p-10 rounded-none shadow-lg border-4 border-amber-100`}>
+              <p className={`text-xl leading-relaxed text-${palette.text}/90 text-center`}>
+                {data.accommodation}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.rsvp && (
+        <section className="py-16 px-8 bg-gradient-to-b from-orange-50 to-amber-50">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-8">
+              <UserCheck className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl md:text-4xl font-light text-${palette.text} mb-4`} style={{ fontFamily: 'Georgia, serif' }}>
+                OSA
+              </h2>
+              <div className="flex items-center justify-center gap-6 mt-6 mb-6">
+                <div className={`w-24 h-px bg-${palette.primary}`}></div>
+                <div className={`text-4xl text-${palette.primary}`}>❋</div>
+                <div className={`w-24 h-px bg-${palette.primary}`}></div>
+              </div>
+              {data.rsvpDeadline && (
+                <p className={`text-lg text-${palette.text}/60 mt-2`}>
+                  Svara senast {data.rsvpDeadline}
+                </p>
+              )}
+            </div>
+            <div className={`bg-amber-50/80 backdrop-blur-sm p-10 rounded-none shadow-xl border-4 border-amber-100`}>
+              {data.rsvpMessage && (
+                <p className={`text-lg leading-relaxed text-${palette.text}/80 mb-8 text-center`}>
+                  {data.rsvpMessage}
+                </p>
+              )}
+              {siteId ? (
+                <RSVPForm
+                  siteId={siteId}
+                  deadline={data.rsvpDeadline}
+                  palette={{
+                    primary: '#B26D4A',
+                    secondary: '#A25D3B',
+                    accent: '#F3D4C2',
+                  }}
+                />
+              ) : (
+                <div className={`p-8 rounded-none text-center bg-amber-100/60`}>
+                  <p className={`text-${palette.text}`}>OSA-formuläret visas här när sidan är publicerad</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   )
 }
@@ -1958,6 +2184,136 @@ export function WhimsicalTemplate({
           </div>
         </section>
       )}
+
+      {sections.faq && data.faq.length > 0 && (
+        <section className={`py-16 px-8 bg-gradient-to-b from-${palette.background} via-white to-${palette.background}`}>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <HelpCircle className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl md:text-4xl font-bold text-${palette.text} mb-4`} style={{ fontFamily: 'Comic Sans MS, cursive' }}>
+                Vanliga Frågor
+              </h2>
+              <div className="flex justify-center gap-4 mt-6">
+                <span className="text-4xl">❓</span>
+                <span className="text-4xl">💭</span>
+                <span className="text-4xl">❔</span>
+              </div>
+            </div>
+            <div className="space-y-4">
+              {data.faq.map((item, index) => (
+                <details
+                  key={index}
+                  className={`group bg-gradient-to-r from-${palette.primary}/10 to-${palette.secondary}/10 p-8 rounded-3xl shadow-md hover:shadow-xl transition-all border-4 border-${
+                    ['pink-300', 'purple-300', 'yellow-300'][index % 3]
+                  }`}
+                  style={{ transform: index % 2 === 0 ? 'rotate(-0.5deg)' : 'rotate(0.5deg)' }}
+                >
+                  <summary className={`cursor-pointer flex items-center justify-between text-xl font-bold text-${palette.text} list-none`} style={{ fontFamily: 'Comic Sans MS, cursive' }}>
+                    {item.question}
+                    <span className="ml-4 transform group-open:rotate-180 transition-transform text-${palette.primary} text-3xl">
+                      ⭐
+                    </span>
+                  </summary>
+                  <p className={`mt-6 text-lg text-${palette.text}/80 leading-relaxed`}>
+                    {item.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.registry && data.giftRegistry && (
+        <section className="py-16 px-8 bg-white">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="mb-8">
+              <Gift className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl md:text-4xl font-bold text-${palette.text} mb-4`} style={{ fontFamily: 'Comic Sans MS, cursive' }}>
+                Önskelista
+              </h2>
+              <div className="flex justify-center gap-4 mt-6">
+                <span className="text-4xl">🎁</span>
+                <span className="text-4xl">💝</span>
+                <span className="text-4xl">🎀</span>
+              </div>
+            </div>
+            <div className={`bg-gradient-to-br from-${palette.primary}/20 to-${palette.secondary}/20 p-10 rounded-3xl shadow-xl border-4 border-pink-300`}>
+              <p className={`text-xl leading-relaxed text-${palette.text}/90 font-semibold`}>
+                {data.giftRegistry}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.accommodation && data.accommodation && (
+        <section className={`py-16 px-8 bg-gradient-to-b from-${palette.background} to-white`}>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <Home className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl md:text-4xl font-bold text-${palette.text} mb-4`} style={{ fontFamily: 'Comic Sans MS, cursive' }}>
+                Boende
+              </h2>
+              <div className="flex justify-center gap-4 mt-6">
+                <span className="text-4xl">🏨</span>
+                <span className="text-4xl">🛏️</span>
+                <span className="text-4xl">🏡</span>
+              </div>
+            </div>
+            <div className={`bg-gradient-to-br from-${palette.accent}/30 to-${palette.primary}/10 p-10 rounded-3xl shadow-lg border-4 border-purple-300`}>
+              <p className={`text-xl leading-relaxed text-${palette.text}/90 text-center font-semibold`}>
+                {data.accommodation}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.rsvp && (
+        <section className="py-16 px-8 bg-white">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-8">
+              <UserCheck className={`w-16 h-16 mx-auto mb-6 text-${palette.primary}`} />
+              <h2 className={`text-4xl md:text-4xl font-bold text-${palette.text} mb-4`} style={{ fontFamily: 'Comic Sans MS, cursive' }}>
+                OSA
+              </h2>
+              <div className="flex justify-center gap-4 mt-6 mb-6">
+                <span className="text-4xl animate-bounce">💌</span>
+                <span className="text-4xl animate-bounce" style={{ animationDelay: '0.2s' }}>📝</span>
+                <span className="text-4xl animate-bounce" style={{ animationDelay: '0.4s' }}>✉️</span>
+              </div>
+              {data.rsvpDeadline && (
+                <p className={`text-lg text-${palette.text}/60 mt-2 font-bold`}>
+                  Svara senast {data.rsvpDeadline}
+                </p>
+              )}
+            </div>
+            <div className={`bg-gradient-to-br from-${palette.primary}/20 to-${palette.secondary}/20 p-10 rounded-3xl shadow-xl border-4 border-yellow-300`}>
+              {data.rsvpMessage && (
+                <p className={`text-lg leading-relaxed text-${palette.text}/80 mb-8 text-center font-semibold`}>
+                  {data.rsvpMessage}
+                </p>
+              )}
+              {siteId ? (
+                <RSVPForm
+                  siteId={siteId}
+                  deadline={data.rsvpDeadline}
+                  palette={{
+                    primary: '#B26D4A',
+                    secondary: '#A25D3B',
+                    accent: '#F3D4C2',
+                  }}
+                />
+              ) : (
+                <div className={`p-8 rounded-2xl text-center bg-${palette.accent}/30`}>
+                  <p className={`text-${palette.text} font-bold`}>OSA-formuläret visas här när sidan är publicerad</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   )
 }
@@ -2210,6 +2566,125 @@ export function CinematicTemplate({
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+      )}
+
+      {sections.faq && data.faq.length > 0 && (
+        <section className={`py-16 px-8 bg-${palette.background}`}>
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-10">
+              <h2
+                className={`text-4xl md:text-4xl font-thin uppercase tracking-[0.2em] text-${palette.text} mb-4`}
+                style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif' }}
+              >
+                FAQ
+              </h2>
+              <div className={`w-16 h-px bg-${palette.primary}`}></div>
+            </div>
+            <div className="space-y-1">
+              {data.faq.map((item, index) => (
+                <details
+                  key={index}
+                  className={`group py-8 border-b border-${palette.text}/10 hover:border-${palette.primary}/40 transition-colors`}
+                >
+                  <summary className={`cursor-pointer flex items-center justify-between text-2xl font-light text-${palette.text} list-none`} style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif' }}>
+                    {item.question}
+                    <span className="ml-4 transform group-open:rotate-180 transition-transform text-${palette.primary}">
+                      <div className={`w-2 h-2 rounded-full bg-${palette.text}/20`}></div>
+                    </span>
+                  </summary>
+                  <p className={`mt-6 text-lg text-${palette.text}/60 leading-relaxed font-light`}>
+                    {item.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.registry && data.giftRegistry && (
+        <section className={`py-16 px-8 bg-${palette.background}`}>
+          <div className="max-w-4xl mx-auto">
+            <div className="mb-10">
+              <h2
+                className={`text-4xl md:text-4xl font-thin uppercase tracking-[0.2em] text-${palette.text} mb-4`}
+                style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif' }}
+              >
+                Registry
+              </h2>
+              <div className={`w-16 h-px bg-${palette.primary}`}></div>
+            </div>
+            <div className={`border border-${palette.text}/20 p-10`}>
+              <p className={`text-xl leading-relaxed text-${palette.text}/80 font-light`}>
+                {data.giftRegistry}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.accommodation && data.accommodation && (
+        <section className={`py-16 px-8 bg-${palette.background}`}>
+          <div className="max-w-4xl mx-auto">
+            <div className="mb-10">
+              <h2
+                className={`text-4xl md:text-4xl font-thin uppercase tracking-[0.2em] text-${palette.text} mb-4`}
+                style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif' }}
+              >
+                Accommodation
+              </h2>
+              <div className={`w-16 h-px bg-${palette.primary}`}></div>
+            </div>
+            <div className={`border border-${palette.text}/20 p-10`}>
+              <p className={`text-xl leading-relaxed text-${palette.text}/80 font-light`}>
+                {data.accommodation}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {sections.rsvp && (
+        <section className={`py-16 px-8 bg-${palette.background}`}>
+          <div className="max-w-3xl mx-auto">
+            <div className="mb-10">
+              <h2
+                className={`text-4xl md:text-4xl font-thin uppercase tracking-[0.2em] text-${palette.text} mb-4`}
+                style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif' }}
+              >
+                RSVP
+              </h2>
+              <div className={`w-16 h-px bg-${palette.primary}`}></div>
+              {data.rsvpDeadline && (
+                <p className={`text-sm uppercase tracking-widest text-${palette.text}/60 mt-4`}>
+                  Deadline: {data.rsvpDeadline}
+                </p>
+              )}
+            </div>
+            <div className={`border border-${palette.text}/20 p-10`}>
+              {data.rsvpMessage && (
+                <p className={`text-lg leading-relaxed text-${palette.text}/70 mb-8 font-light`}>
+                  {data.rsvpMessage}
+                </p>
+              )}
+              {siteId ? (
+                <RSVPForm
+                  siteId={siteId}
+                  deadline={data.rsvpDeadline}
+                  palette={{
+                    primary: '#B26D4A',
+                    secondary: '#A25D3B',
+                    accent: '#F3D4C2',
+                  }}
+                />
+              ) : (
+                <div className={`p-8 text-center border border-${palette.text}/20`}>
+                  <p className={`text-${palette.text}/60 font-light uppercase tracking-widest text-sm`}>OSA form will appear when published</p>
+                </div>
+              )}
+            </div>
           </div>
         </section>
       )}
